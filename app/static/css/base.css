@@ -1,0 +1,16 @@
+body {
+    background-image: url('../img/bg.png');
+}
+
+@font-face {
+    font-family: Computerfont;
+    src: url('../fonts/Computerfont.ttf');
+}
+
+h1, h4 {
+    font-family: computerFont;
+}
+
+.nav-link {
+    color: darkgrey;
+}

@@ -1,25 +1,97 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid text-center text-success h-100">
-	<div class="row align-self-center h-25">
-		<div class="col">
-			<h1>Solve-O-Matic!</h1>
+<div class="container-fluid h-100">
+	<div class="card bg-secondary h-100">
+		<div class="card-header">
+			<ul class="nav nav-tabs card-header-tabs bg-dark">
+				<li class="nav-item">
+					<a class="nav-link active" id="move-tab" data-toggle="tab" href="#move">Move</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="sites-tab" data-toggle="tab" href="#sites">Sites</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="gripper-tab" data-toggle="tab" href="#gripper">Grippers</a>
+				</li>
+			</ul>
 		</div>
-	</div>
-	<div class="row align-self-center h-50">
-		<div class="col">
-			<h4>Place your cube in the grippers...</h4>
+		<div class="card-body">
+			<div class="tab-content">
+				<div class="container-fluid tab-pane show active" id="move">
+					<div class="row">
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper A</div>
+							<div class="btn-group mt-2">
+								<button type="button" class="btn btn-info">Open</button>
+								<button type="button" class="btn btn-info">Close</button>
+								<button type="button" class="btn btn-info">Load</button>
+							</div>
+							<div class="btn-group mt-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper B</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Open</button>
+								<button type="button" class="btn btn-info">Close</button>
+								<button type="button" class="btn btn-info">Load</button>
+							</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid tab-pane" id="sites">
+					<div class="row">
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper A</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Open</button>
+								<button type="button" class="btn btn-info">Close</button>
+								<button type="button" class="btn btn-info">Load</button>
+							</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper B</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid tab-pane" id="gripper">
+					<div class="row">
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper A</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper B</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Open</button>
+								<button type="button" class="btn btn-info">Close</button>
+								<button type="button" class="btn btn-info">Load</button>
+							</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="row align-self-center>
-		<div class="col">
-			<a class="btn btn-success" href="scan.html">Scan</a>
-		</div>
-	</div>
-	<div class="row align-self-left>
-		<div class="col">
-			<a class="btn btn-secondary" href="settings.html">Settings</a>
+		<div class="card-footer text-right">
+			<a class="btn btn-dark" href="/index">Done</a>
 		</div>
 	</div>
 </div>

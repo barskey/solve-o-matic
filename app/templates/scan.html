@@ -2,21 +2,26 @@
 
 {% block content %}
 <!-- Page specific JavaScript -->
-<script src="static/js/scan.js"></script>
+<script src="static/js/scan.js" type="text/javascript"></script>
 
-<div class="container-fluid text-center h-100">
-	<div class="row">
-		<div class="col">
-			<video autoplay></video>
+<div class="container text-center h-100">
+	<div class="row align-items-center">
+		<div class="col" id="screenshot">
+			<video class="d-none" autoplay></video>
+			<img src="static/img/no-image.jpg">
 			<canvas class="d-none"></canvas>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col">
-			<button class="btn btn-info" id="capture-button">Capture</button>
-			<button class="btn btn-primary" id="screenshot-button">Screenshot</button>
+	<div class="row align-items-center h-25">
+		<div class="col-3 clearfix">
+			<a class="btn btn-secondary float-left" href="/index">Cancel</a>
+		</div>
+		<div class="col-6">
+			<span id="scan-status" class="text-warning text-center">This is sample status This is sample status This is sample status.</span>
+		</div>
+		<div class="col-3 clearfix">
+			<button class="btn btn-success float-right" id="scan-next">Next...</button>
 		</div>
 	</div>
 </div>
-<script
 {% endblock %}
