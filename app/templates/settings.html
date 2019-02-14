@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- Page specific JavaScript -->
+<script src="static/js/settings.js" type="text/javascript"></script>
+
 <div class="container-fluid h-100">
 	<div class="card bg-secondary h-100">
 		<div class="card-header">
@@ -44,74 +47,74 @@
 							<td colspan="4"><h4 class="text-warning">Gripper B</h4></th>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-open">Open</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-open-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-open-value">180</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-open-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-open-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-open-value">179</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-open-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-open">Open</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-open-cmd">Open</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-open-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-open-value">{{ settings['gripa']['open'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-open-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-open-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-open-value">{{ settings['gripb']['open'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-open-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-open-cmd">Open</button></td>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-load">Load</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-load-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-load-value">150</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-load-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-load-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-load-value">148</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-load-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-load">Load</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-load-cmd">Load</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-load-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-load-value">{{ settings['gripa']['load'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-load-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-load-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-load-value">{{ settings['gripb']['load'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-load-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-load-cmd">Load</button></td>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-close">Close</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-close-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-close-value">140</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-close-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-close-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-close-value">141</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-close-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-close">Close</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-close-cmd">Close</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-close-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-close-value">{{ settings['gripa']['close'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-close-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-close-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-close-value">{{ settings['gripb']['close'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-close-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-close-cmd">Close</button></td>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-ccw">CCW</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-ccw-value">1</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-ccw-value">2</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-ccw">CCW</i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-ccw-cmd">CCW</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-ccw-value">{{ settings['gripa']['ccw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-ccw-value">{{ settings['gripb']['ccw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-ccw-cmd">CCW</i></button></td>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-center">Center</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-center-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-center-value">1</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-center-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-center-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-center-value">2</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-center-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-center">Center</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-center-cmd">Center</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-center-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-center-value">{{ settings['gripa']['center'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-center-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-center-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-center-value">{{ settings['gripb']['center'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-center-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-center-cmd">Center</button></td>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-a-cw">CW</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-a-cw-value">1</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-a-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span class="text-warning" id="gripper-b-cw-value">2</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info" id="gripper-b-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block" id="gripper-b-cw">CW</i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripa-cw-cmd">CW</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripa-cw-value">{{ settings['gripa']['cw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripa-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span class="text-warning" id="gripb-cw-value">{{ settings['gripb']['cw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info settings-btn" id="gripb-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block settings-btn" id="gripb-cw-cmd">CW</i></button></td>
 						</tr>
 					</table>
 				</div>
 				<div class="container-fluid tab-pane" id="save">
-					<div class="row my-4">
+					<div class="row h-50 align-items-center">
 						<div class="col text-center">
 							<h4 class="text-warning">All settings saved!</h4>
 						</div>
 					</div>
-					<div class="row my-4">
+					<div class="row">
 						<div class="col text-center">
 							<a class="btn btn-warning" href="/index">Main Menu</a> 
 						</div>

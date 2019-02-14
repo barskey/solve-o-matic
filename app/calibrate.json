@@ -1,0 +1,35 @@
+{
+    "crop": {
+        "center": [159, 123],
+        "size": 186
+    },
+    "sites": {
+        "center": [159, 123],
+        "size": 34,
+        "pitch": 48
+    },
+    "gripa": {
+        "open": 179,
+        "closed": 155,
+        "load": 145,
+        "ccw": 3,
+        "center": 89,
+        "cw": 177
+    },
+    "gripb": {
+        "open": 177,
+        "closed": 154,
+        "load": 146,
+        "ccw": 2,
+        "center": 92,
+        "cw": 180
+    },
+    "colors": {
+        "red": [114, 25, 28],
+        "white": [182, 190, 193],
+        "blue": [2, 38, 88],
+        "yellow": [174, 162, 43],
+        "green": [1, 71, 29],
+        "orange": [174, 162, 43]
+    }
+}
