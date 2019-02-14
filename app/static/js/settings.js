@@ -8,23 +8,27 @@ $( document ).ready( function() {
         var id = $( this ).attr( "id" );
         var ary = id.split("-");
         var gripper = ary[0];
-        var cmd = ary[1];
-        var value = ary[2];
-        if (value == "cmd")
+        var setting = ary[1];
+        var mod = ary[2];
+        if (mod == "move")
         {
             $.post( "/move_gripper", {
                 gripper: gripper,
-                cmd: cmd
+                cmd: setting
+            }).done( function(response) {
+                console.log(response);
             });
         }
         else
         {
             $.post( "/set_calibrate", {
-                setting: gripper,
-                cmd: cmd,
-                value: value
+                gripper: gripper,
+                setting: setting,
+                mod: mod
             }).done( function( response ) {
-                
+                var id = response.gripper + "-" + response.setting + "-value";
+                console.log(id);
+                $( "#" + id ).addClass( 'text-warning' ).text( response.value );
             }).fail( function() {
                 console.log( "Failed to set calibrate settings." );
             });

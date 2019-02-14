@@ -210,7 +210,7 @@ PATTERNS = {
 
 class MyCube(object):
 
-	def __init__(self, site_center_x, site_center_y, site_size, crop_center, crop_size, grip_a, twist_a, grip_b, twist_b):
+	def __init__(self, site_center_x, site_center_y, site_size, crop_center, crop_size):
 		self._raw_colors = [[None for i in range(9)] for j in range(6)] # r, g, b for each raw color found on cube
 		self._face_colors = [None for i in range(6)] # matched color of the center site on each face e.g. red, blue, etc.
 		self._match_colors = [[None for i in range(9)] for j in self._face_colors] # matched color for each site e.g. red, blue, etc.
@@ -405,16 +405,6 @@ class MyCube(object):
 		"""
 		return ''.join(str(site) for sitelist in self._cube_colors for site in sitelist)
 
-	def get_pos(self, servo_pin):
-		"""
-		Function to get current position of servo
-		"""
-		# TODO read input pin for servo position
-		# pos = GPIO.input(servo_pin)
-		pos = 90 # debug
-
-		return pos
-
 	def get_up_face(self):
 		"""
 		Returns string representing current up face
@@ -476,6 +466,29 @@ class MyCube(object):
 		Function to twist gripper
 		gripper = 'A' or 'B'
 		dir = '+' 90-deg CW, '-' 90-deg CCW
+		"""
+		o = self._orientation
+
+		other_gripper = 'B' if gripper == 'A' else 'A'
+		if self._grip_state[gripper] == 'Load': # don't twist if gripper is in load position
+			print ('Can\'t twist %s. Gripper %s currently in %s position.') % (gripper, other_gripper, self._grip_state[gripper])
+			return
+		if self._grip_state[other_gripper] == 'Load': # don't twist if other gripper is in load position
+			print ('Can\'t twist %s. Gripper %s currently in load position.') % (gripper, other_gripper)
+			return
+		if self._grip_state[other_gripper] == 'Open': # other gripper is open, so this twist moves cube and changes orientation
+			self._orientation = NEW_ORIENTATION_TWISTA[o][dir] if gripper == 'A' else NEW_ORIENTATION_TWISTB[o][dir]
+			print ('Twist gripper %s %s New orientation: %s') % (gripper, dir, self._orientation)
+			#time.sleep(.1)
+		else: # other gripper must be closed, hence it will twist face
+			print ('Twist gripper %s %s') % (gripper, dir)
+			#time.sleep(.1)
+
+	def twist_absolute(self, gripper, pos):
+		"""
+		Function to twist gripper
+		gripper = 'A' or 'B'
+		pos = 'ccw', 'center' or 'cw'
 		"""
 		o = self._orientation
 
