@@ -10,7 +10,7 @@
     },
     "gripa": {
         "open": 179,
-        "closed": 155,
+        "close": 155,
         "load": 145,
         "ccw": 3,
         "center": 89,
@@ -18,7 +18,7 @@
     },
     "gripb": {
         "open": 177,
-        "closed": 154,
+        "close": 154,
         "load": 146,
         "ccw": 2,
         "center": 92,

@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from flask import jsonify
 from app import app
 import json
@@ -24,8 +24,15 @@ def get_config():
 
 @app.route('/set_calibrate', methods=['POST'])
 def set_calibrate():
-	config = json.load(open('app/calibrate.json'))
-	return jsonify({'msg': 'Test message'})
+	calibrate = json.load(open('app/calibrate.json'))
+	setting = request.form['setting']
+	cmd = request.form['cmd']
+	value = request.form['value']
+
+	new_value = calibrate[setting][value] + 
+
+	calibrate[setting][value] = 1
+	return jsonify({'data': 'Test message'})
 	
 def scan_cube():
 	pass

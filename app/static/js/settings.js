@@ -12,20 +12,21 @@ $( document ).ready( function() {
         var value = ary[2];
         if (value == "cmd")
         {
-            $.post("/move_gripper", {
+            $.post( "/move_gripper", {
                 gripper: gripper,
                 cmd: cmd
             });
         }
         else
         {
-            $.post("/set_calibrate", {
+            $.post( "/set_calibrate", {
                 setting: gripper,
+                cmd: cmd,
                 value: value
-            }).done(function(response) {
-                update_setting(response.data);
-            }).error(function() {
-                console.log("Error setting calibration data.");
+            }).done( function( response ) {
+                
+            }).fail( function() {
+                console.log( "Failed to set calibrate settings." );
             });
         }
     });
