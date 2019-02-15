@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Page specific JavaScript -->
+<script src="static/js/calibration.js" type="text/javascript"></script>
+
+<div class="container-fluid h-100">
+	<div class="card bg-secondary h-100">
+		<div class="card-header">
+			<ul class="nav nav-tabs card-header-tabs bg-dark">
+				<li class="nav-item">
+					<a class="nav-link active" id="sites-tab" data-toggle="tab" href="#sites">Sites</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="calibrate-tab" data-toggle="tab" href="#calibrate">Calibrate</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="save-tab" data-toggle="tab" href="#save">Done</a>
+				</li>
+			</ul>
+		</div>
+		<div class="card-body p-1">
+			<div class="tab-content">
+				<div class="container-fluid tab-pane show active" id="sites">
+					<div class="row">
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper A</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Open</button>
+								<button type="button" class="btn btn-info">Close</button>
+								<button type="button" class="btn btn-info">Load</button>
+							</div>
+							<div class="btn-group my-2">
+								<button type="button" class="btn btn-info">Twist CW</button>
+								<button type="button" class="btn btn-info">Twist CCW</button>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="text-light text-center my-2">Gripper B</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid tab-pane" id="calibrate">
+					<table class="table table-sm table-borderless text-center text-light">
+						<tr>
+							<td colspan="4" class="p-0"><h4 class="text-warning m-0">Gripper A</h4></th>
+							<td colspan="4" class="p-0"><h4 class="text-warning m-0">Gripper B</h4></th>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-open-move">Open</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-open-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-open-value">{{ cal_data['gripa']['open'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-open-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-open-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-open-value">{{ cal_data['gripb']['open'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-open-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-open-move">Open</button></td>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-load-move">Load</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-load-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-load-value">{{ cal_data['gripa']['load'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-load-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-load-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-load-value">{{ cal_data['gripb']['load'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-load-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-load-move">Load</button></td>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-close-move">Close</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-close-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-close-value">{{ cal_data['gripa']['close'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-close-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-close-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-close-value">{{ cal_data['gripb']['close'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-close-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-close-move">Close</button></td>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-ccw-move">CCW</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-ccw-value">{{ cal_data['gripa']['ccw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-ccw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-ccw-value">{{ cal_data['gripb']['ccw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-ccw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-ccw-move">CCW</i></button></td>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-center-move">Center</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-center-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-center-value">{{ cal_data['gripa']['center'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-center-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-center-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-center-value">{{ cal_data['gripb']['center'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-center-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-center-move">Center</button></td>
+						</tr>
+						<tr>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-cw-move">CW</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-cw-value">{{ cal_data['gripa']['cw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-cw-less"><i class="fa fa-caret-square-left"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-cw-value">{{ cal_data['gripb']['cw'] }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-cw-more"><i class="fa fa-caret-square-right"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-cw-move">CW</i></button></td>
+						</tr>
+						<tr>
+							<td colspan="8"  class="align-middle p-0"><em><span class="text-warning" id="cal-results"></span></em></td>
+						</tr>
+					</table>
+				</div>
+				<div class="container-fluid tab-pane" id="save">
+					<div class="row h-50 align-items-center">
+						<div class="col text-center">
+							<h4 class="text-warning">All calibration settings saved!</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<a class="btn btn-warning" href="/index">Main Menu</a> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

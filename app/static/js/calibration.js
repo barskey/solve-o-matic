@@ -1,12 +1,8 @@
 $( document ).ready( function() {
 
-    function update_setting(data) {
-        console.log(data);
-    }
-
-    $( ".settings-btn ").click( function() {
+    $( ".cal-btn" ).click( function() {
         var id = $( this ).attr( "id" );
-        var ary = id.split("-");
+        var ary = id.split( "-" );
         var gripper = ary[0];
         var setting = ary[1];
         var mod = ary[2];
@@ -15,13 +11,19 @@ $( document ).ready( function() {
             $.post( "/move_gripper", {
                 gripper: gripper,
                 cmd: setting
-            }).done( function(response) {
-                console.log(response);
+            }).done( function( response ) {
+                var msg;
+                if ( response.code < 0) {
+                    msg = "Error: " + response.msg;
+                } else {
+                    msg = "Success"
+                }
+                $( "#cal-results" ).text( msg );
             });
         }
         else
         {
-            $.post( "/set_calibrate", {
+            $.post( "/set_cal_data", {
                 gripper: gripper,
                 setting: setting,
                 mod: mod
@@ -29,8 +31,9 @@ $( document ).ready( function() {
                 var id = response.gripper + "-" + response.setting + "-value";
                 console.log(id);
                 $( "#" + id ).addClass( 'text-warning' ).text( response.value );
+                $( "#cal-results" ).text( "Saved calibration setting." )
             }).fail( function() {
-                console.log( "Failed to set calibrate settings." );
+                $( "#cal-results" ).text( "Failed to set calibrate settings." )
             });
         }
     });

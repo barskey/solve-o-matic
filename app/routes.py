@@ -1,10 +1,11 @@
 from flask import render_template, request
 from flask import jsonify
 from app import app
-from app import calibration, rscube
+from app import calibration, rscube, bot
 import json
 
 cal = calibration.Calibration()
+bot = bot.Bot(cal)
 cube = rscube.MyCube()
 
 @app.route('/')
@@ -16,12 +17,12 @@ def index():
 def scan():
 	return render_template('scan.html', title='Scan')
 
-@app.route('/settings')
+@app.route('/calibration')
 def settings():
-	settings = json.load(open('app/calibrate.json'))
-	return render_template('settings.html', title='Settings', settings=settings)
+	cal_data = json.load(open('app/calibrate.json'))
+	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
-@app.route('/set_calibrate', methods=['POST'])
+@app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
 	gripper = request.form['gripper']
 	setting = request.form['setting']
@@ -31,18 +32,21 @@ def set_calibrate():
 	new_value = cal.get_property(gripper, setting) + delta
 
 	cal.set_property(gripper, setting, new_value)
-	#print (gripper, setting, new_value)
+	bot.update_cal(cal)
+	
 	return jsonify({'gripper': gripper, 'setting': setting, 'value': new_value})
 
 @app.route('/move_gripper', methods=['POST'])
 def move_gripper():
-	gripper = request.form['gripper'][-1].upper()
+	gripper = request.form['gripper'][-1].upper() # last character to upper case e.g. 'A' from 'gripa'
 	cmd = request.form['cmd']
+	result = None
 	if cmd in ['open', 'load', 'close']:
-		mycube.grip(gripper, cmd[0])
+		result = bot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
 	elif cmd in ['ccw', 'center', 'cw']:
-		mycube.twist_absolute(gripper, cmd)
-	return jsonify({'msg': True})
+		result = bot.twist(gripper, cmd)
+	
+	return jsonify({'code': result[0], 'msg': result[1]})
 	
 def scan_cube():
 	pass
