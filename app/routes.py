@@ -3,6 +3,9 @@ from flask import jsonify
 from app import app
 from app import calibration, rscube, bot
 import json
+import base64
+import io
+from PIL import Image, ImageStat
 
 cal = calibration.Calibration()
 bot = bot.Bot(cal)
@@ -47,6 +50,12 @@ def move_gripper():
 		result = bot.twist(gripper, cmd)
 	
 	return jsonify({'code': result[0], 'msg': result[1]})
-	
+
+@app.route('/scan', methods=['POST'])
 def scan_cube():
-	pass
+	header,img = request.form['imgdata'].split(',')
+	img_decoded = base64.b64decode(img)
+	face = Image.open(io.BytesIO(img_decoded))
+	#face.show() # debug
+
+	return 'ok'

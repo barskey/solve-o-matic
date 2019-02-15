@@ -101,4 +101,3 @@ class Bot(object):
         time.sleep(self.SLEEP_TIME)
         self.TWIST_STATE[gripper] = new_state
         return [0 if self.GRIP_STATE[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
-

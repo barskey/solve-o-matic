@@ -192,6 +192,15 @@ class MyCube(object):
 		s = self.get_abs_site(site_r)
 		self._match_colors[upface][s - 1] = color
 
+	def set_orientation(self, gripper, dir):
+		"""
+		Updates cube orientation given a gripper and direction it twisted
+		"""
+		if gripper == 'A':
+			self.orientation = NEW_ORIENTATION_TWISTA[self.orientation][dir]
+		elif gripper == 'B':
+			self.orientation = NEW_ORIENTATION_TWISTB[self.orientation][dir]
+
 	def move_face_for_twist(self, face_to_move, to_gripper = None):
 		"""
 		Will position face_to_move to gripper A or B depending on fewest moves.
@@ -233,9 +242,9 @@ class MyCube(object):
 		for move in moves:
 			gripper_to_move = move[0]
 			cmd = move[1]
-			if cmd == '+' or cmd == '-': # if it's a twist command
-				self.twist(gripper_to_move, cmd)
-			else: # it must be a grip command
-				self.grip(gripper_to_move, cmd)
+			#if cmd == '+' or cmd == '-': # if it's a twist command
+			#	self.twist(gripper_to_move, cmd)
+			#else: # it must be a grip command
+			#	self.grip(gripper_to_move, cmd)
 
 		return to_gripper
