@@ -4,6 +4,17 @@ import time
 # for convenience in referening array index
 tp = {'ccw': 0, 'center': 1, 'cw': 2}
 
+# with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
+# perform moves, then scan, hence no moves before scanning U
+MOVES_FOR_SCAN = [
+    "",          # scan U
+    "F+, R+",    # scan L
+    "D-",        # scan F
+    "D-",        # scan R
+    "D-",        # scan B
+    "F-, L+, U-" # scan D
+]
+
 class Bot(object):
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
