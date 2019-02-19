@@ -4,11 +4,12 @@ class Calibration(object):
     def __init__(self):
         calibrate = json.load(open('app/calibrate.json'))
         self.CROP = {
-            'center': calibrate['crop']['center'],
+            'tl': calibrate['crop']['tl'],
             'size': calibrate['crop']['size']
         }
         self.SITES = {
-            'center': calibrate['sites']['center'],
+            'tlx': calibrate['sites']['tlx'],
+            'tly': calibrate['sites']['tly'],
             'size': calibrate['sites']['size'],
             'pitch': calibrate['sites']['pitch']
         }

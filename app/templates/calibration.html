@@ -22,21 +22,38 @@
 		<div class="card-body p-1">
 			<div class="tab-content">
 				<div class="container-fluid tab-pane show active" id="sites">
-					<div class="row">
-						<div class="col-6">
-							<div class="text-light text-center my-2">Gripper A</div>
-							<div class="btn-group my-2">
-								<button type="button" class="btn btn-info">Open</button>
-								<button type="button" class="btn btn-info">Close</button>
-								<button type="button" class="btn btn-info">Load</button>
-							</div>
-							<div class="btn-group my-2">
-								<button type="button" class="btn btn-info">Twist CW</button>
-								<button type="button" class="btn btn-info">Twist CCW</button>
-							</div>
+					<div class="row h-75 align-items-center">
+						<div class="col-5">
+							<table class="table table-sm table-borderless">
+								<tr>
+									<td colspan="3" class="text-center text-warning aign-middle">Position</td>
+								</tr>
+								<tr>
+									<td colspan="3" class="text-center"><button class="btn btn-info set-btn" id="sites-tly-less"><i class="fa fa-caret-up"></i></button></td>
+								</tr>
+								<tr>
+									<td class="text-right"><button class="btn btn-info set-btn" id="sites-tlx-less"><i class="fa fa-caret-left"></i></button></td>
+									<td class="text-center"><button class="btn btn-outline-info" disabled><i class="fa fa-square"></i></button></td>
+									<td class="text-left"><button class="btn btn-info set-btn" id="sites-tlx-more"><i class="fa fa-caret-right"></i></button></td>
+								</tr>
+								<tr>
+									<td colspan="3" class="text-center"><button class="btn btn-info set-btn" id="sites-tly-more"><i class="fa fa-caret-down"></i></button></td>
+								</tr>
+								<tr>
+									<td class="text-right"><button class="btn btn-info set-btn" id="sites-size-less"><i class="fa fa-caret-left"></i></button></td>
+									<td class="text-center text-warning align-middle">Size</td>
+									<td class="text-left"><button class="btn btn-info set-btn" id="sites-size-more"><i class="fa fa-caret-right"></i></button></td>
+								</tr>
+								<tr>
+									<td class="text-right"><button class="btn btn-info set-btn" id="sites-pitch-less"><i class="fa fa-caret-left"></i></button></td>
+									<td class="text-center text-warning align-middle">Pitch</td>
+									<td class="text-left"><button class="btn btn-info set-btn" id="sites-pitch-more"><i class="fa fa-caret-right"></i></button></td>
+								</tr>
+							</table>
 						</div>
-						<div class="col-6">
-							<div class="text-light text-center my-2">Gripper B</div>
+						<div class="col-1"></div>
+						<div class="col">
+							<canvas width="160" height="160" id="sites-canvas"></canvas>
 						</div>
 					</div>
 				</div>

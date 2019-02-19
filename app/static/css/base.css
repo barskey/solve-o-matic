@@ -14,3 +14,12 @@ h1, h4 {
 .nav-link {
     color: darkgrey;
 }
+
+canvas {
+    z-index: 10;
+}
+
+#screenshot video,canvas {
+    left: 20;
+    top: -70;
+}

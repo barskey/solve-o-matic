@@ -170,15 +170,6 @@ ROT_TABLE = {
 	270: [3, 6, 9, 2, 5, 8, 1, 4, 7]
 }
 
-testimages = [
-	'testimg/uface.jpg',
-	'testimg/rface.jpg',
-	'testimg/fface.jpg',
-	'testimg/dface.jpg',
-	'testimg/lface.jpg',
-	'testimg/bface.jpg'
-]
-
 PATTERNS = {
 	'Solid Cube':           ['_solid.jpg',                   'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB'],
 	'Checkerboard':         ['checkerboard.jpg',             'UFUFUFUFURURURURURFRFRFRFRFDBDBDBDBDLDLDLDLDLBLBLBLBLB'],

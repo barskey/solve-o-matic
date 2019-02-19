@@ -1,15 +1,11 @@
 from flask import render_template, request
 from flask import jsonify
 from app import app
-from app import calibration, rscube, bot
+from app import calibration, bot
 import json
-import base64
-import io
-from PIL import Image, ImageStat
 
 cal = calibration.Calibration()
 bot = bot.Bot(cal)
-cube = rscube.MyCube()
 
 @app.route('/')
 @app.route('/index')
@@ -27,17 +23,22 @@ def settings():
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
-	gripper = request.form['gripper']
+	prop = request.form['prop']
 	setting = request.form['setting']
 	mod = request.form['mod']
 
 	delta = 1 if mod == 'more' else -1
-	new_value = cal.get_property(gripper, setting) + delta
+		
+	new_value = cal.get_property(prop, setting) + delta
 
-	cal.set_property(gripper, setting, new_value)
+	cal.set_property(prop, setting, new_value)
 	bot.update_cal(cal)
 	
-	return jsonify({'gripper': gripper, 'setting': setting, 'value': new_value})
+	return jsonify({'prop': prop, 'setting': setting, 'value': new_value})
+
+@app.route('/get_sites', methods=['POST'])
+def get_sites():
+	return jsonify({'left': cal.SITES['tlx'], 'top': cal.SITES['tly'], 'pitch': cal.SITES['pitch'], 'size': cal.SITES['size']})
 
 @app.route('/move_gripper', methods=['POST'])
 def move_gripper():
@@ -51,11 +52,19 @@ def move_gripper():
 	
 	return jsonify({'code': result[0], 'msg': result[1]})
 
-@app.route('/scan', methods=['POST'])
-def scan_cube():
-	header,img = request.form['imgdata'].split(',')
-	img_decoded = base64.b64decode(img)
-	face = Image.open(io.BytesIO(img_decoded))
-	#face.show() # debug
+@app.route('/scan_next', methods=['POST'])
+def scan_next():
+	if request.form['start'] == 'true':
+		result = bot.scan_cube()
+		return jsonify({'msg': result[1]})
+	else:
+		result = bot.scan_move()
+		return jsonify({'upface': result})
 
-	return 'ok'
+@app.route('/process_img', methods=['POST'])
+def process_img():
+	face = request.form['face']
+	header,img = request.form['imgdata'].split(',') # get image from post data
+	face_colors = bot.process_upface(face, img, cal.SITES)
+
+	return jsonify({'colors': face_colors, 'face': face})

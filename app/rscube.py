@@ -176,13 +176,11 @@ class MyCube(object):
 		s = self.get_abs_site(sitenum)
 		return self._raw_colors[upface][s - 1]
 
-	def set_up_raw_color(self, site_r, rawcolor):
+	def set_raw_color(self, face, site, rawcolor):
 		"""
-		Sets the raw color for site site_r on upface. site_r needs to be transposed for upface rotation
+		Sets the raw color for site site on given face.
 		"""
-		sitenum = self.get_abs_site(int(site_r))
-		upface = FACES[self.get_up_face()]
-		self._raw_colors[upface][sitenum - 1] = rawcolor
+		self._raw_colors[FACES[face]][site] = rawcolor
 
 	def set_up_match_color(self, site_r, color):
 		"""
