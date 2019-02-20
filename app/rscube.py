@@ -6,7 +6,7 @@ from app.lookups import *
 class MyCube(object):
 
 	def __init__(self):
-		self._raw_colors = [[None for i in range(9)] for j in range(6)] # r, g, b for each raw color found on cube
+		self._raw_colors = [[None for i in range(9)] for j in range(6)] # [r,g,b,a] for each raw color found on cube
 		self._face_colors = [None for i in range(6)] # matched color of the center site on each face e.g. red, blue, etc.
 		self._match_colors = [[None for i in range(9)] for j in self._face_colors] # matched color for each site e.g. red, blue, etc.
 		self._cube_colors = [[None for i in range(9)] for j in self._face_colors] # letter for corresponding face_color for each site on cube
@@ -31,36 +31,6 @@ class MyCube(object):
 	@solve_to.setter
 	def solve_to(self, pattern):
 		self._solve_to = PATTERNS[pattern][1]
-
-	""" 	def scan_face(self):
-			Gets image from camera, crops and gets average (mean) colors
-			in each region, and stores in _raw_colors.
-			Returns list of colors on this face for uix
-			logo_threshold = 8
-
-			face = FACES[self._orientation[0]]
-			rot = UP_FACE_ROT[self._orientation]
-
-			#get image from camera
-			face_im = Image.open(testimages[face]) # TODO get camera instead of test images
-
-			# crop the image to square
-			img = face_im.crop(self.crop_rect)
-			#im.show() # DEBUG
-
-			#print 'Processing face', face, rot # DEBUG
-
-			# loop through each site and store its raw color
-			for sitenum in range(1, 10):
-				abs_sitenum = ROT_TABLE[rot][sitenum - 1] # get unrotated site number
-				site = img.crop(self._site_rects[sitenum - 1]) # crop the img so only the site is left
-				self._raw_colors[face][abs_sitenum - 1] = ImageStat.Stat(site).mean # store the mean color in _raw_colors
-
-			ret_colors = []
-			for i in ROT_TABLE[rot]:
-				ret_colors.append(self._raw_colors[face][i - 1])
-			return ret_colors # returns rotated list of raw_colors
-	"""
 
 	def get_abs_site(self, site_r):
 		"""

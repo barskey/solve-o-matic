@@ -78,7 +78,8 @@ $( document ).ready( function() {
         ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
         //convert to desired file format
         var dataURI = canvas.toDataURL( 'image/png' );
-        console.log(upface);        $.post( '/process_img', { imgdata: dataURI, face: upface })
+        console.log(upface);        
+        $.post( '/process_img', { imgdata: dataURI, face: upface })
         .done( function( response ) {
             drawFace( response.face, response.colors )
             console.log( response.colors );
