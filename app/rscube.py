@@ -1,15 +1,13 @@
 from kociemba import solve
-from PIL import Image, ImageStat
 import time
 from app.lookups import *
 
 class MyCube(object):
 
 	def __init__(self):
+		self._colors = [] # list of colors to match against
 		self._raw_colors = [[None for i in range(9)] for j in range(6)] # [r,g,b,a] for each raw color found on cube
-		self._face_colors = [None for i in range(6)] # matched color of the center site on each face e.g. red, blue, etc.
-		self._match_colors = [[None for i in range(9)] for j in self._face_colors] # matched color for each site e.g. red, blue, etc.
-		self._cube_colors = [[None for i in range(9)] for j in self._face_colors] # letter for corresponding face_color for each site on cube
+		self._cube_colors = [[None for i in range(9)] for j in range(6)] # letter for corresponding face_color for each site on cube
 		self.solve_to = 'Solid Cube' # string representing cube solve to pattern
 		self._solve_string = None # instructions to solve cube
 
@@ -38,59 +36,6 @@ class MyCube(object):
 		"""
 		return ROT_TABLE[UP_FACE_ROT[self._orientation]][site_r - 1]
 
-	def set_face_colors(self):
-		"""
-		Sets face color for all faces.
-		Should be run after check_all_sites returns True
-		"""
-		for face, colors in enumerate(self._match_colors):
-			self._face_colors[face] = colors[4]
-		#print self._face_colors # debug
-
-	def check_face_colors(self):
-		"""
-		Checks that each face has a color assigned and that they are unique
-		"""
-		if None in self._face_colors:
-			return False
-		elif len(self._face_colors) > len(set(self._face_colors)):
-			return False
-		else:
-			return True
-
-	def check_face_matched(self, f):
-		"""
-		Checks that each site on a face has a matched color
-		"""
-		face = str(f)
-		if not face.isdigit():
-			face = FACES[face]
-		if None in self._match_colors[face]:
-			return False
-		else:
-			return True
-
-	def clear_matched(self):
-		"""
-		Clears all matched sites on all faces for a re-scan_face
-		"""
-		self._match_colors = [[None for i in range(9)] for j in self._face_colors]
-		return
-
-	def check_all_sites(self):
-		"""
-		Checks that there are exactly 9 of each match_color.
-		"""
-		colors = []
-		for face in self._match_colors:
-			for color in face:
-				if color not in colors:
-					colors.append(color)
-		for color in colors:
-			if sum(f.count(color) for f in self._match_colors) != 9:
-				return False
-		return True
-
 	def get_solve_string(self):
 		"""
 		Gets the solve string
@@ -116,7 +61,8 @@ class MyCube(object):
 		"""
 		for f in range(6):
 			for s in range(9):
-				self._cube_colors[f][s] = FACES_STR[self._face_colors.index(self._match_colors[f][s])]
+				break
+				#self._cube_colors[f][s] = FACES_STR[self._face_colors.index(self._match_colors[f][s])]
 		#print self._cube_colors # debug
 
 	def get_cube_def(self):
@@ -137,28 +83,11 @@ class MyCube(object):
 		"""
 		return UP_FACE_ROT[self._orientation]
 
-	def get_up_raw_color(self, site_r):
-		"""
-		Returns the raw color for site site_r on upface. Transposes if necessary for rotated face
-		"""
-		sitenum = int(site_r)
-		upface = FACES[self.get_up_face()]
-		s = self.get_abs_site(sitenum)
-		return self._raw_colors[upface][s - 1]
-
 	def set_raw_color(self, face, site, rawcolor):
 		"""
-		Sets the raw color for site site on given face.
+		Sets the raw color for site on given face.
 		"""
 		self._raw_colors[FACES[face]][site] = rawcolor
-
-	def set_up_match_color(self, site_r, color):
-		"""
-		Sets matched color on up_face for given (possibly) rotated site_r
-		"""
-		upface = FACES[self.get_up_face()]
-		s = self.get_abs_site(site_r)
-		self._match_colors[upface][s - 1] = color
 
 	def set_orientation(self, gripper, dir):
 		"""

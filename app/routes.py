@@ -65,6 +65,6 @@ def scan_next():
 def process_img():
 	face = request.form['face']
 	header,img = request.form['imgdata'].split(',') # get image from post data
-	face_colors = bot.process_upface(face, img, cal.SITES)
+	result = bot.process_face(face, img, cal.SITES)
 
-	return jsonify({'colors': face_colors, 'face': face})
+	return jsonify({'colors': result['face_colors'], 'face': face, 'unsure': result['unsure_sites']})

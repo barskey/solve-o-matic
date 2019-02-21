@@ -4,11 +4,15 @@ from app import rscube
 import base64
 import io
 from PIL import Image, ImageStat
-
+from colormath.color_objects import sRGBColor, LabColor
+from colormath.color_conversions import convert_color
+from colormath.color_diff import delta_e_cie2000
 
 # for convenience in referening array index
 tp = {'ccw': 0, 'center': 1, 'cw': 2}
 tpk = ['ccw', 'center', 'cw']
+
+THRESHOLD = 10
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
 # perform moves, then scan -- hence no moves before scanning U
@@ -24,6 +28,7 @@ MOVES_FOR_SCAN = [
 
 class Bot(object):
     CUBE = None
+    colors = []
 
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
@@ -153,7 +158,7 @@ class Bot(object):
 
         return self.CUBE.get_up_face()
 
-    def process_upface(self, face, img, sites):
+    def process_face(self, face, img, sites):
         """
         Gets image from camera, crops and gets average (mean) colors
         in each region, and stores in _raw_colors.
@@ -161,20 +166,47 @@ class Bot(object):
         """
         img_decoded = base64.b64decode(img)
         face_img = Image.open(io.BytesIO(img_decoded))
-        #face.show() # debug
 
         # loop through each site and store its raw color
         sitenum = 0
         face_colors = [None for i in range(9)]
+        unsure_sites = []
         for row in range(0, 3):
             for col in range(0, 3):
                 left = sites['tlx'] + (col * sites['pitch'])
                 upper = sites['tly'] + (row * sites['pitch'])
                 site = face_img.crop((left, upper, left + sites['size'], upper + sites['size'])) # crop the img so only the site is left
                 #site.show() # debug
-                mean_color = ImageStat.Stat(site).mean # store the mean color in _raw_colors
-                self.CUBE.set_raw_color(face, sitenum, mean_color)
+                mean_color = ImageStat.Stat(site).mean
+                match_color, delta_e = find_closest_color(mean_color, self.colors)
+                #print (match_color, delta_e) # debug
+                if delta_e > THRESHOLD:
+                    if len(self.colors) < 6: # store this color since list is not populated yet
+                        self.colors.append(mean_color)
+                        self.CUBE.set_raw_color(face, sitenum, mean_color)
+                    else:
+                        unsure_sites.append(sitenum)
+                else:
+                    self.CUBE.set_raw_color(face, sitenum, match_color)
+                
                 hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
                 face_colors[sitenum] = hex_color # return the hex color
                 sitenum = sitenum + 1
-        return face_colors
+        print(self.colors)
+        return {'face_colors': face_colors, 'unsure_sites': unsure_sites}
+
+
+def find_closest_color(color, colors_to_check):
+	# create Color object from site color and convert to lab color for comparison
+	r, g, b, a = (x / 255.0 for x in color)
+	site_color_lab = convert_color(sRGBColor(r, g, b), LabColor)
+	last_delta_e = 999
+	match_color = None
+	for c in colors_to_check:
+		r, g, b, a = (x / 255.0 for x in c)
+		check_color_lab = convert_color(sRGBColor(r, g, b), LabColor) # convert to lab color for comparison
+		delta_e = delta_e_cie2000(site_color_lab, check_color_lab)
+		if delta_e < last_delta_e: # use this check to find the closest match
+			match_color = c
+			last_delta_e = delta_e
+	return match_color, last_delta_e

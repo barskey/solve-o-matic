@@ -2,3 +2,4 @@ flask
 python-dotenv
 kociemba
 pillow
+colormath
