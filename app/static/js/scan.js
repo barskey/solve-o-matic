@@ -38,6 +38,31 @@ $( document ).ready( function() {
         cc.strokeRect( face_tl[face][0], face_tl[face][1], 45, 45 );
     }
 
+    // canvas for drawing cube site boxes over camera view
+    var camc = $( "#cam-view" )[0].getContext( "2d" );
+
+    function drawCamView( siteColors, unsureColors ) {
+        var sites = {tlx: 45, tly: 35, size: 24, pitch: 31};
+        var i = 0;
+        for ( var r = 0; r < 3; r++ ) {
+            for ( var c = 0; c < 3; c++) {
+                var x = sites.tlx + (sites.pitch * c);
+                var y = sites.tly + (sites.pitch * r);
+                console.log(x,y);
+                camc.fillStyle = siteColors[i];
+                camc.fillRect( x, y, sites.size, sites.size );
+                camc.strokeStyle = "#707070";
+                unsureColors.forEach(site => {
+                    if (i == site) {
+                        camc.strokeStyle = "#00FF00";
+                    }
+                });
+                camc.strokeRect( x, y, sites.size, sites.size );
+                i++;
+            }
+        }
+    }
+
     // canvas for capturing img from video
     const canvas = document.createElement( "canvas" );
     canvas.width = 160;
@@ -80,7 +105,9 @@ $( document ).ready( function() {
         var dataURI = canvas.toDataURL( 'image/png' );
         $.post( '/process_img', { imgdata: dataURI, face: upface })
         .done( function( response ) {
-            drawFace( response.face, response.colors )
+            drawFace( response.face, response.colors );
+            var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
+            drawCamView( colors, response.unsure );
             if ( response.unsure.length > 0 ) {
                 console.warn("Unsure Sites!");
             }
