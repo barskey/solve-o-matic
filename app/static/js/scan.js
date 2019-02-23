@@ -1,5 +1,6 @@
 $( document ).ready( function() {
-    var face_tl = {
+    var sites;
+    const face_tl = {
         "U": [45,55],
         "F": [45,100],
         "D": [45,145],
@@ -13,6 +14,16 @@ $( document ).ready( function() {
     const constraints = {
         video: {width: {exact: 160}, height: {exact: 160}}
     };
+
+    function get_sites() {
+        $.post( "/get_sites" )
+        .done( function( response ) {
+            sites = response.sites;
+            draw_sites();
+        });
+    }
+
+    get_sites();
 
     // canvas for drawing cube site boxes on
     var cc = $( "#cube-flat" )[0].getContext( "2d" );
@@ -42,7 +53,6 @@ $( document ).ready( function() {
     var camc = $( "#cam-view" )[0].getContext( "2d" );
 
     function drawCamView( siteColors, unsureColors ) {
-        var sites = {tlx: 45, tly: 35, size: 24, pitch: 31};
         var i = 0;
         for ( var r = 0; r < 3; r++ ) {
             for ( var c = 0; c < 3; c++) {
@@ -106,8 +116,8 @@ $( document ).ready( function() {
         $.post( '/process_img', { imgdata: dataURI, face: upface })
         .done( function( response ) {
             drawFace( response.face, response.colors );
-            var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
-            drawCamView( colors, response.unsure );
+            //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
+            drawCamView( response.colors, response.unsure );
             if ( response.unsure.length > 0 ) {
                 console.warn("Unsure Sites!");
             }

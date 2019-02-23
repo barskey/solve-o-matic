@@ -1,25 +1,38 @@
 $( document ).ready( function() {
-    var sites_left, sites_top, sites_size, sites_pitch;
+    var sites;
+
+    const video = $( "#video" )[0]; // [0] gets the DOM object from the jquery object
+
+    const constraints = {
+        video: {width: {exact: 160}, height: {exact: 160}}
+    };
+
+    // start the camera streaming
+    navigator.mediaDevices.getUserMedia( constraints ).then(
+        function(stream) {
+            console.log("Capturing video...");
+            video.srcObject = stream;
+        }, function(error) {
+            console.error("Error: ", error);
+        }
+    );
 
     function get_sites() {
         $.post( "/get_sites" )
         .done( function( response ) {
-            sites_left = response.left;
-            sites_top = response.top;
-            sites_pitch = response.pitch;
-            sites_size = response.size;
+            sites = response.sites;
             draw_sites();
         });
     }
 
+    var canvas = $( "#sites-canvas" )[0]
+    var sc = canvas.getContext( "2d" );
     function draw_sites() {
-        var canvas = $( "#sites-canvas" )[0]
-        var sc = canvas.getContext( "2d" );
         sc.clearRect(0, 0, canvas.width, canvas.height);
         sc.strokeStyle = "#FFFFFF"
         for ( var r = 0; r < 3; r++ ) {
             for ( var c = 0; c < 3; c++ ) {
-                sc.strokeRect ( sites_left + (c * sites_pitch), sites_top + (r * sites_pitch), sites_size, sites_size );
+                sc.strokeRect ( sites.tlx + (c * sites.pitch), sites.tly + (r * sites.pitch), sites.size, sites.size );
             }
         }
     }

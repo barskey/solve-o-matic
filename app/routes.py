@@ -38,7 +38,7 @@ def set_calibrate():
 
 @app.route('/get_sites', methods=['POST'])
 def get_sites():
-	return jsonify({'left': cal.SITES['tlx'], 'top': cal.SITES['tly'], 'pitch': cal.SITES['pitch'], 'size': cal.SITES['size']})
+	return jsonify({'sites': cal.SITES})
 
 @app.route('/move_gripper', methods=['POST'])
 def move_gripper():
