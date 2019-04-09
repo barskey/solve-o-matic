@@ -4,4 +4,4 @@ app = Flask(__name__)
 
 from app import routes
 
-app.run(debug=True, ssl_context='adhoc', host='0.0.0.0')
+app.run(debug=True, host='0.0.0.0')
