@@ -3,6 +3,7 @@ from flask import jsonify
 from app import app
 from app import calibration, bot
 import json
+from picamera import PiCamera
 
 cal = calibration.Calibration()
 bot = bot.Bot(cal)
@@ -18,6 +19,10 @@ def scan():
 
 @app.route('/calibration')
 def settings():
+	camera = PiCamera()
+	camera.resolution = (1024, 768)
+	camera.start_preview()
+	camera.capture('images/test.jpg', resize=(160, 160))
 	cal_data = json.load(open('app/calibrate.json'))
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
