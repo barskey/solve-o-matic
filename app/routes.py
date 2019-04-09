@@ -20,9 +20,10 @@ def scan():
 @app.route('/calibration')
 def settings():
 	camera = PiCamera()
-	camera.resolution = (1024, 768)
+	camera.resolution = (160, 160)
 	camera.start_preview()
-	camera.capture('app/static/images/image.jpg', resize=(160, 160))
+	camera.capture('app/static/images/image.jpg')
+	camera.close()
 	cal_data = json.load(open('app/calibrate.json'))
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
