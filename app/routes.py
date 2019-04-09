@@ -4,6 +4,7 @@ from app import app
 from app import calibration, bot
 import json
 from picamera import PiCamera
+import time
 
 cal = calibration.Calibration()
 bot = bot.Bot(cal)
@@ -22,6 +23,7 @@ def settings():
 	camera = PiCamera()
 	camera.resolution = (160, 160)
 	camera.start_preview()
+	time.sleep(2)
 	camera.capture('app/static/images/image.jpg')
 	camera.close()
 	cal_data = json.load(open('app/calibrate.json'))
