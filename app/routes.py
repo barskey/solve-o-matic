@@ -22,7 +22,7 @@ def settings():
 	camera = PiCamera()
 	camera.resolution = (1024, 768)
 	camera.start_preview()
-	camera.capture('img/test.jpg', resize=(160, 160))
+	camera.capture('images/image.jpg', resize=(160, 160))
 	cal_data = json.load(open('app/calibrate.json'))
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
