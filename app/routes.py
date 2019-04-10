@@ -4,6 +4,8 @@ from app import app
 from app import calibration, bot
 import json
 from picamera import PiCamera
+from io import BytesIO
+from PIL import Image
 import time
 
 cal = calibration.Calibration()
@@ -20,12 +22,14 @@ def scan():
 
 @app.route('/calibration')
 def settings():
+	stream = BytesIO()
 	camera = PiCamera()
 	camera.resolution = (160, 160)
 	camera.start_preview()
-	time.sleep(2)
-	camera.capture('app/static/images/image.jpg')
-	camera.close()
+	time.sleep(2) #  carmera warm-up?
+	camera.capture(stream, format='jpeg')
+	stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
+	image = Image.open(stream)
 	cal_data = json.load(open('app/calibrate.json'))
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
