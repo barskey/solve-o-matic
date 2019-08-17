@@ -30,6 +30,7 @@ class Bot(object):
     CUBE = None
     colors = []
 
+    kit = None
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
     grip_channel = {'A': 1, 'B': 3}
