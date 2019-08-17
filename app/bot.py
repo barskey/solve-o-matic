@@ -59,6 +59,8 @@ class Bot(object):
             #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
             t = threading.Thread(target=set_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
             t.start()
+            u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self.TWIST_POS[grip][1],))
+            u.start()
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
