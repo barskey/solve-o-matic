@@ -88,7 +88,7 @@ class Bot(object):
         gripper = 'A' or 'B'
         cmd = 'o' 'c' or 'l' for load
         """
-        self.kit.servo[grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
+        self.kit.servo[self.grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
         time.sleep(self.SLEEP_TIME)
         self.GRIP_STATE[gripper] = cmd
         return [0, cmd]
@@ -128,7 +128,7 @@ class Bot(object):
         if self.GRIP_STATE[other_gripper] == 'l': # don't twist if other gripper is in load position
             return [-1, 'Can\'t twist {}. Gripper {} currently in load position.'.format(gripper, other_gripper)]
 
-        self.kit.servo[twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
+        self.kit.servo[self.twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
         time.sleep(self.SLEEP_TIME)
         self.TWIST_STATE[gripper] = new_state
         return [0 if self.GRIP_STATE[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
