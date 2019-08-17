@@ -9,7 +9,7 @@ from PIL import Image
 import time
 
 cal = calibration.Calibration()
-bot = bot.Bot(cal)
+mybot = bot.Bot(cal)
 
 @app.route('/')
 @app.route('/index')
@@ -44,7 +44,7 @@ def set_calibrate():
 	new_value = cal.get_property(prop, setting) + delta
 
 	cal.set_property(prop, setting, new_value)
-	bot.update_cal(cal)
+	mybot.update_cal(cal)
 	
 	return jsonify({'prop': prop, 'setting': setting, 'value': new_value})
 
@@ -58,25 +58,25 @@ def move_gripper():
 	cmd = request.form['cmd']
 	result = None
 	if cmd in ['open', 'load', 'close']:
-		result = bot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
+		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
 	elif cmd in ['ccw', 'center', 'cw']:
-		result = bot.twist(gripper, cmd)
+		result = mybot.twist(gripper, cmd)
 	
 	return jsonify({'code': result[0], 'msg': result[1]})
 
 @app.route('/scan_next', methods=['POST'])
 def scan_next():
 	if request.form['start'] == 'true':
-		result = bot.scan_cube()
+		result = mybot.scan_cube()
 		return jsonify({'msg': result[1]})
 	else:
-		result = bot.scan_move()
+		result = mybot.scan_move()
 		return jsonify({'upface': result})
 
 @app.route('/process_img', methods=['POST'])
 def process_img():
 	face = request.form['face']
 	header,img = request.form['imgdata'].split(',') # get image from post data
-	result = bot.process_face(face, img, cal.SITES)
+	result = mybot.process_face(face, img, cal.SITES)
 
 	return jsonify({'colors': result['face_colors'], 'face': face, 'unsure': result['unsure_sites']})
