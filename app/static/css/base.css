@@ -19,7 +19,7 @@ canvas {
     z-index: 10;
 }
 
-#screenshot video,canvas {
+#screenshot canvas {
     left: 20;
     top: -70;
 }

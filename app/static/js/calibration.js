@@ -1,22 +1,6 @@
 $( document ).ready( function() {
     var sites;
 
-    const video = $( "#video" )[0]; // [0] gets the DOM object from the jquery object
-
-    const constraints = {
-        video: {width: {exact: 160}, height: {exact: 160}}
-    };
-
-    // start the camera streaming
-    navigator.mediaDevices.getUserMedia( constraints ).then(
-        function(stream) {
-            console.log("Capturing video...");
-            video.srcObject = stream;
-        }, function(error) {
-            console.error("Error: ", error);
-        }
-    );
-
     function get_sites() {
         $.post( "/get_sites" )
         .done( function( response ) {
