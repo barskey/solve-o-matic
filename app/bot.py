@@ -52,15 +52,15 @@ class Bot(object):
         self.update_cal(cal_data) # get/update calibration data for in this instance
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
-        for grip in ['A', 'B']:
+        #for grip in ['A', 'B']:
             #self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
             #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
-            t = threading.Thread(target=set_servo_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
-            t.start()
-            t.join()
-            u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self.TWIST_POS[grip][1],))
-            u.start()
-            u.join()
+            #t = threading.Thread(target=set_servo_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
+            #t.start()
+            #t.join()
+            #u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self.TWIST_POS[grip][1],))
+            #u.start()
+            #u.join()
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
@@ -95,6 +95,7 @@ class Bot(object):
         cmd = 'o' 'c' or 'l' for load
         """
         #self.kit.servo[self.grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
+        set_servo_angle(self.grip_channel[gripper], self.GRIP_POS[gripper][cmd])
         time.sleep(self.SLEEP_TIME)
         self.GRIP_STATE[gripper] = cmd
         return [0, cmd]
@@ -135,6 +136,7 @@ class Bot(object):
             return [-1, 'Can\'t twist {}. Gripper {} currently in load position.'.format(gripper, other_gripper)]
 
         #self.kit.servo[self.twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
+        set_servo_angle(self.twist_channel[gripper], self.TWIST_POS[gripper][new_state])
         time.sleep(self.SLEEP_TIME)
         self.TWIST_STATE[gripper] = new_state
         return [0 if self.GRIP_STATE[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
