@@ -55,6 +55,7 @@ sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev lib
 sudo apt-get install libopenjp2-7-dev
 sudo apt-get install libtiff5
 sudo apt-get install python3-picamera
+sudo apt install libatlas3-base
 cd ~
 git clone https://github.com/barskey/solve-o-matic.git
 cd solve-o-matic
