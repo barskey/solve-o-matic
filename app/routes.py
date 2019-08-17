@@ -26,10 +26,10 @@ def settings():
 	camera = PiCamera()
 	camera.resolution = (80, 80)
 	camera.start_preview()
-	#time.sleep(2) #  carmera warm-up?
-	#camera.capture(stream, format='jpeg')
-	#stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
-	#image = Image.open(stream)
+	time.sleep(2) #  carmera warm-up?
+	camera.capture(stream, format='jpeg')
+	stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
+	image = Image.open(stream)
 	cal_data = json.load(open('app/calibrate.json'))
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
