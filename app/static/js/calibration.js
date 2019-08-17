@@ -4,7 +4,7 @@ $( document ).ready( function() {
     const video = $( "#video" )[0]; // [0] gets the DOM object from the jquery object
 
     const constraints = {
-        video: {width: {exact: 80}, height: {exact: 80}}
+        video: {width: {exact: 160}, height: {exact: 160}}
     };
 
     // start the camera streaming

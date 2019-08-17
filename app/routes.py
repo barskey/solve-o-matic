@@ -24,7 +24,7 @@ def scan():
 def settings():
 	stream = BytesIO()
 	camera = PiCamera()
-	camera.resolution = (160, 160)
+	camera.resolution = (80, 80)
 	camera.start_preview()
 	time.sleep(2) #  carmera warm-up?
 	camera.capture(stream, format='jpeg')
