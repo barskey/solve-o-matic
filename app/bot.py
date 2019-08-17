@@ -13,6 +13,8 @@ from colormath.color_diff import delta_e_cie2000
 tp = {'ccw': 0, 'center': 1, 'cw': 2}
 tpk = ['ccw', 'center', 'cw']
 
+kit = ServoKit(channels=8)
+
 THRESHOLD = 10
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
@@ -31,7 +33,6 @@ class Bot(object):
     CUBE = None
     colors = []
 
-    kit = None
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
     grip_channel = {'A': 1, 'B': 3}
@@ -51,17 +52,13 @@ class Bot(object):
     def __init__(self, cal_data):
         self.CUBE = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
-        self.kit = ServoKit(channels=8) # initialize the servo kit
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
         for grip in ['A', 'B']:
-            t = threading.Thread(target=self.set_angle, args=(1,))
-            t.start()
             #self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
             #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
-
-    def set_angle(s, a):
-        self.kit.servo[s].angle = ang
+            t = threading.Thread(target=set_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
+            t.start()
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
@@ -217,3 +214,6 @@ def find_closest_color(color, colors_to_check):
 			match_color = c
 			last_delta_e = delta_e
 	return match_color, last_delta_e
+
+def set_angle(s, a):
+    kit.servo[s].angle = a
