@@ -21,7 +21,7 @@ TWIST_CHANNEL = {'A': 0, 'B': 2}
 SERVO_RANGE = [
     (570, 2330),
     (750, 2250),
-    (600, 2250),
+    (650, 2420),
     (680, 2410)
 ]
 SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
@@ -41,8 +41,8 @@ MOVES_FOR_SCAN = [
 ]
 
 class Bot(object):
-    CUBE = None
-    colors = []
+    _cube = None
+    _colors = []
     
     _grip_state = {'A': 'o', 'B': 'o'}
     _twist_state = {'A': tp['center'], 'B': tp['center']}
@@ -56,7 +56,7 @@ class Bot(object):
     }
 
     def __init__(self, cal_data):
-        self.CUBE = rscube.MyCube()
+        self._cube = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
         self.init_servos() # initialize servos to their default ranges/positions
     
@@ -156,7 +156,7 @@ class Bot(object):
 
     def scan_cube(self):
         self._scan_index = 0
-        self.CUBE.orientation = 'UFD'
+        self._cube.orientation = 'UFD'
         self.grip('B','c')
         self.grip('A','c')
         return [0, 'Ready']
@@ -172,12 +172,12 @@ class Bot(object):
                 if cmd in ['+', '-']:
                     result = self.twist(gripper, cmd)
                     if result[0] == 0:
-                        self.CUBE.set_orientation(gripper, cmd)
+                        self._cube.set_orientation(gripper, cmd)
                 elif cmd in ['o', 'c', 'l']:
                     result = self.grip(gripper, cmd)
                 self._scan_index = self._scan_index + 1
 
-        return self.CUBE.get_up_face()
+        return self._cube.get_up_face()
 
     def process_face(self, face, img, sites):
         """
@@ -199,21 +199,21 @@ class Bot(object):
                 site = face_img.crop((left, upper, left + sites['size'], upper + sites['size'])) # crop the img so only the site is left
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
-                match_color, delta_e = find_closest_color(mean_color, self.colors)
+                match_color, delta_e = find_closest_color(mean_color, self._colors)
                 #print (match_color, delta_e) # debug
                 if delta_e > THRESHOLD:
-                    if len(self.colors) < 6: # store this color since list is not populated yet
-                        self.colors.append(mean_color)
-                        self.CUBE.set_raw_color(face, sitenum, mean_color)
+                    if len(self._colors) < 6: # store this color since list is not populated yet
+                        self._colors.append(mean_color)
+                        self._cube.set_raw_color(face, sitenum, mean_color)
                     else:
                         unsure_sites.append(sitenum)
                 else:
-                    self.CUBE.set_raw_color(face, sitenum, match_color)
+                    self._cube.set_raw_color(face, sitenum, match_color)
                 
                 hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
                 face_colors[sitenum] = hex_color # return the hex color
                 sitenum = sitenum + 1
-        print(self.colors)
+        print(self._colors)
         return {'face_colors': face_colors, 'unsure_sites': unsure_sites}
 
 
