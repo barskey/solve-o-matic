@@ -24,9 +24,8 @@ def scan():
 def settings():
 	stream = BytesIO()
 	camera = PiCamera()
-	camera.resolution = (80, 80)
-	camera.start_preview()
-	time.sleep(2) #  carmera warm-up?
+	camera.resolution = (160, 160)
+	camera.start_preview(fullscreen=False, window=(250,90,160,160))
 	camera.capture(stream, format='jpeg')
 	stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
 	image = Image.open(stream)
