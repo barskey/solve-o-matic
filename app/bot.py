@@ -53,9 +53,9 @@ class Bot(object):
         self.kit = ServoKit(channels=8) # initialize the servo kit
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
-        #for grip in ['A', 'B']:
-        #    self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
-        #    self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
+        for grip in ['A', 'B']:
+            self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
+            self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
