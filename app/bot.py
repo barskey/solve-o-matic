@@ -19,10 +19,10 @@ THRESHOLD = 10
 GRIP_CHANNEL = {'A': 1, 'B': 3}
 TWIST_CHANNEL = {'A': 0, 'B': 2}
 SERVO_RANGE = [
-    (580, 2250),
+    (570, 2330),
     (750, 2250),
-    (750, 2400),
-    (750, 2250)
+    (600, 2250),
+    (680, 2410)
 ]
 SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
 
