@@ -20,3 +20,5 @@ six==1.12.0
 Werkzeug==0.14.1
 wrapt==1.11.1
 colormath
+pyopenssl
+adafruit-circuitpython-servokit

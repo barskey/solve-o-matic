@@ -1,6 +1,6 @@
 import time
 from app import rscube
-#from adafruit_servokit import ServoKit
+from adafruit_servokit import ServoKit
 import base64
 import io
 from PIL import Image, ImageStat
@@ -32,8 +32,8 @@ class Bot(object):
 
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
-    grip_channel = {'A': 0, 'B': 2}
-    twist_channel = {'A': 1, 'B': 3}
+    grip_channel = {'A': 1, 'B': 3}
+    twist_channel = {'A': 0, 'B': 2}
     
     GRIP_STATE = {'A': 'o', 'B': 'o'}
     TWIST_STATE = {'A': tp['center'], 'B': tp['center']}
@@ -49,12 +49,12 @@ class Bot(object):
     def __init__(self, cal_data):
         self.CUBE = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
-        #self.kit = ServoKit(channels=8) # initialize the servo kit
+        self.kit = ServoKit(channels=8) # initialize the servo kit
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
-        #for grip in ['A', 'B']:
-        #    self.kit.servo[grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
-        #    self.kit.servo[twist_channel[grip]].angle = self.TWIST_POS[grip][1]
+        for grip in ['A', 'B']:
+            self.kit.servo[grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
+            self.kit.servo[twist_channel[grip]].angle = self.TWIST_POS[grip][1]
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
@@ -88,7 +88,7 @@ class Bot(object):
         gripper = 'A' or 'B'
         cmd = 'o' 'c' or 'l' for load
         """
-        #self.kit.servo[grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
+        self.kit.servo[grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
         time.sleep(self.SLEEP_TIME)
         self.GRIP_STATE[gripper] = cmd
         return [0, cmd]
@@ -128,7 +128,7 @@ class Bot(object):
         if self.GRIP_STATE[other_gripper] == 'l': # don't twist if other gripper is in load position
             return [-1, 'Can\'t twist {}. Gripper {} currently in load position.'.format(gripper, other_gripper)]
 
-        #self.kit.servo[twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
+        self.kit.servo[twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
         time.sleep(self.SLEEP_TIME)
         self.TWIST_STATE[gripper] = new_state
         return [0 if self.GRIP_STATE[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
