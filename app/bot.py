@@ -30,7 +30,7 @@ class Bot(object):
     CUBE = None
     colors = []
 
-    kit = ServoKit(channels=8) # initialize the servo kit
+    kit = None
     SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
     # channels on servo pwm board
     grip_channel = {'A': 1, 'B': 3}
@@ -50,12 +50,12 @@ class Bot(object):
     def __init__(self, cal_data):
         self.CUBE = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
-        #self.kit = ServoKit(channels=8) # initialize the servo kit
+        self.kit = ServoKit(channels=8) # initialize the servo kit
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
-        for grip in ['A', 'B']:
-            self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
-            self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
+        #for grip in ['A', 'B']:
+        #    self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
+        #    self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
