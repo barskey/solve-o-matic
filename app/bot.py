@@ -13,8 +13,6 @@ from colormath.color_diff import delta_e_cie2000
 tp = {'ccw': 0, 'center': 1, 'cw': 2}
 tpk = ['ccw', 'center', 'cw']
 
-kit = ServoKit(channels=8)
-
 THRESHOLD = 10
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
@@ -57,7 +55,7 @@ class Bot(object):
         for grip in ['A', 'B']:
             #self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
             #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
-            t = threading.Thread(target=set_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
+            t = threading.Thread(target=set_serv_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
             t.start()
             u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self.TWIST_POS[grip][1],))
             u.start()
@@ -217,5 +215,7 @@ def find_closest_color(color, colors_to_check):
 			last_delta_e = delta_e
 	return match_color, last_delta_e
 
-def set_angle(s, a):
+kit = ServoKit(channels=8)
+
+def set_servo_angle(s, a):
     kit.servo[s].angle = a
