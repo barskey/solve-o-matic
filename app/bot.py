@@ -1,4 +1,5 @@
 import time
+import threading
 from app import rscube
 from adafruit_servokit import ServoKit
 import base64
@@ -54,8 +55,13 @@ class Bot(object):
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
         for grip in ['A', 'B']:
-            self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
-            self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
+            t = threading.Thread(target=self.set_angle, args=(1,))
+            t.start()
+            #self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
+            #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
+
+    def set_angle(s, a):
+        self.kit.servo[s].angle = ang
 
     def update_cal(self, cal_data):
         self.GRIP_POS['A'] = {
