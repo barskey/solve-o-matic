@@ -15,6 +15,19 @@ tpk = ['ccw', 'center', 'cw']
 
 THRESHOLD = 10
 
+# channels on servo pwm board
+GRIP_CHANNEL = {'A': 1, 'B': 3}
+TWIST_CHANNEL = {'A': 0, 'B': 2}
+SERVO_RANGE = [
+    (580, 2250),
+    (750, 2250),
+    (750, 2400),
+    (750, 2250)
+]
+SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
+
+kit = ServoKit(channels=8)
+
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
 # perform moves, then scan -- hence no moves before scanning U
 MOVES_FOR_SCAN = [
@@ -30,19 +43,14 @@ MOVES_FOR_SCAN = [
 class Bot(object):
     CUBE = None
     colors = []
-
-    SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
-    # channels on servo pwm board
-    grip_channel = {'A': 1, 'B': 3}
-    twist_channel = {'A': 0, 'B': 2}
     
-    GRIP_STATE = {'A': 'o', 'B': 'o'}
-    TWIST_STATE = {'A': tp['center'], 'B': tp['center']}
-    GRIP_POS = {
+    _grip_state = {'A': 'o', 'B': 'o'}
+    _twist_state = {'A': tp['center'], 'B': tp['center']}
+    _grip_pos = {
         'A': {'o': 0, 'c': 0, 'l': 0},
         'B': {'o': 0, 'c': 0, 'l': 0}
     }
-    TWIST_POS = {
+    _twist_pos = {
         'A': [0, 0, 0],
         'B': [0, 0, 0]
     }
@@ -50,43 +58,50 @@ class Bot(object):
     def __init__(self, cal_data):
         self.CUBE = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
-		# initialize both grippers to open/center position
-        # set positions directly to ensure exact position at start
+        self.init_servos() # initialize servos to their default ranges/positions
+    
+    def init_servos(self):
+        # initialize servo pulse ranges
+        for channel in GRIP_CHANNEL.values():
+            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+        for channel in TWIST_CHANNEL.values():
+            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+		# set both grippers to open/center position
         #for grip in ['A', 'B']:
-            #self.kit.servo[self.grip_channel[grip]].angle = self.GRIP_POS[grip]['o']
-            #self.kit.servo[self.twist_channel[grip]].angle = self.TWIST_POS[grip][1]
-            #t = threading.Thread(target=set_servo_angle, args=(self.grip_channel[grip],self.GRIP_POS[grip]['o'],))
+            #self.kit.servo[self.grip_channel[grip]].angle = self._grip_pos[grip]['o']
+            #self.kit.servo[self.twist_channel[grip]].angle = self._twist_pos[grip][1]
+            #t = threading.Thread(target=set_servo_angle, args=(self.grip_channel[grip],self._grip_pos[grip]['o'],))
             #t.start()
             #t.join()
-            #u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self.TWIST_POS[grip][1],))
+            #u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self._twist_pos[grip][1],))
             #u.start()
             #u.join()
 
     def update_cal(self, cal_data):
-        self.GRIP_POS['A'] = {
+        self._grip_pos['A'] = {
             'o': cal_data.GRIPA['open'],
             'c': cal_data.GRIPA['close'],
             'l': cal_data.GRIPA['load']
         }
-        self.GRIP_POS['B'] = {
+        self._grip_pos['B'] = {
             'o': cal_data.GRIPB['open'],
             'c': cal_data.GRIPB['close'],
             'l': cal_data.GRIPB['load']
         }
-        self.TWIST_POS['A'] = [
+        self._twist_pos['A'] = [
             cal_data.GRIPA['ccw'],
             cal_data.GRIPA['center'],
             cal_data.GRIPA['cw']
         ]
-        self.TWIST_POS['B'] = [
+        self._twist_pos['B'] = [
             cal_data.GRIPB['ccw'],
             cal_data.GRIPB['center'],
             cal_data.GRIPB['cw']
         ]
         # move/rotate grippers to current/new positions
         for g in ['A', 'B']:
-            self.grip(g, self.GRIP_STATE[g])
-            self.twist(g, tpk[self.TWIST_STATE[g]])
+            self.grip(g, self._grip_state[g])
+            self.twist(g, tpk[self._twist_state[g]])
 
     def grip(self, gripper, cmd):
         """
@@ -94,10 +109,9 @@ class Bot(object):
         gripper = 'A' or 'B'
         cmd = 'o' 'c' or 'l' for load
         """
-        #self.kit.servo[self.grip_channel[gripper]].angle = self.GRIP_POS[gripper][cmd]
-        set_servo_angle(self.grip_channel[gripper], self.GRIP_POS[gripper][cmd])
-        time.sleep(self.SLEEP_TIME)
-        self.GRIP_STATE[gripper] = cmd
+        set_servo_angle(GRIP_CHANNEL[gripper], self._grip_pos[gripper][cmd])
+        time.sleep(SLEEP_TIME)
+        self._grip_state[gripper] = cmd
         return [0, cmd]
 
     def twist(self, gripper, dir):
@@ -115,31 +129,30 @@ class Bot(object):
 
         new_state = None
         if dir == '-':
-            if self.TWIST_STATE[gripper] == 0:
+            if self._twist_state[gripper] == 0:
                 return [-1, 'Already at min ccw position.']
             else:
-                new_state = self.TWIST_STATE[gripper] - 1
+                new_state = self._twist_state[gripper] - 1
         elif dir == '+':
-            if self.TWIST_STATE[gripper] == len(self.TWIST_STATE[gripper]) - 1:
+            if self._twist_state[gripper] == len(self._twist_state[gripper]) - 1:
                 return [-1, 'Already at max cw position.']
             else:
-                new_state = self.TWIST_STATE[gripper] + 1
+                new_state = self._twist_state[gripper] + 1
         elif dir in ['ccw', 'center', 'cw']:
             new_state  = tp[dir]
         
         if new_state is None:
             return [-1, 'Could not twist. Unknown error.']
 
-        if self.GRIP_STATE[gripper] == 'l': # don't twist if gripper is in load position
-            return [-1, 'Can\'t twist {}. Gripper {} currently in {} position.'.format(gripper, other_gripper, self.GRIP_STATE[gripper])]
-        if self.GRIP_STATE[other_gripper] == 'l': # don't twist if other gripper is in load position
+        if self._grip_state[gripper] == 'l': # don't twist if gripper is in load position
+            return [-1, 'Can\'t twist {}. Gripper {} currently in {} position.'.format(gripper, other_gripper, self._grip_state[gripper])]
+        if self._grip_state[other_gripper] == 'l': # don't twist if other gripper is in load position
             return [-1, 'Can\'t twist {}. Gripper {} currently in load position.'.format(gripper, other_gripper)]
 
-        #self.kit.servo[self.twist_channel[gripper]].angle = self.TWIST_POS[gripper][new_state]
-        set_servo_angle(self.twist_channel[gripper], self.TWIST_POS[gripper][new_state])
-        time.sleep(self.SLEEP_TIME)
-        self.TWIST_STATE[gripper] = new_state
-        return [0 if self.GRIP_STATE[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
+        set_servo_angle(TWIST_CHANNEL[gripper], self._twist_pos[gripper][new_state])
+        time.sleep(SLEEP_TIME)
+        self._twist_state[gripper] = new_state
+        return [0 if self._grip_state[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
 
     def scan_cube(self):
         self._scan_index = 0
@@ -218,8 +231,6 @@ def find_closest_color(color, colors_to_check):
 			match_color = c
 			last_delta_e = delta_e
 	return match_color, last_delta_e
-
-kit = ServoKit(channels=8)
 
 def set_servo_angle(s, a):
     print(s,a)
