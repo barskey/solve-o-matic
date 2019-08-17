@@ -220,4 +220,5 @@ def find_closest_color(color, colors_to_check):
 kit = ServoKit(channels=8)
 
 def set_servo_angle(s, a):
-    kit.servo[s].angle = a
+    print(s,a)
+    #kit.servo[s].angle = a
