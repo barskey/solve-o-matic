@@ -20,6 +20,6 @@ canvas {
 }
 
 #screenshot canvas {
-    left: 20;
-    top: -70;
+    left: 0;
+    top: 0;
 }
