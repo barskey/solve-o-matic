@@ -50,7 +50,7 @@ class Bot(object):
     def __init__(self, cal_data):
         self.CUBE = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
-        self.kit = ServoKit(channels=8) # initialize the servo kit
+        #self.kit = ServoKit(channels=8) # initialize the servo kit
 		# initialize both grippers to open/center position
         # set positions directly to ensure exact position at start
         #for grip in ['A', 'B']:
