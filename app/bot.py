@@ -67,16 +67,6 @@ class Bot(object):
             kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
         for channel in TWIST_CHANNEL.values():
             kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
-		# set both grippers to open/center position
-        #for grip in ['A', 'B']:
-            #self.kit.servo[self.grip_channel[grip]].angle = self._grip_pos[grip]['o']
-            #self.kit.servo[self.twist_channel[grip]].angle = self._twist_pos[grip][1]
-            #t = threading.Thread(target=set_servo_angle, args=(self.grip_channel[grip],self._grip_pos[grip]['o'],))
-            #t.start()
-            #t.join()
-            #u = threading.Thread(target=set_servo_angle, args=(self.twist_channel[grip],self._twist_pos[grip][1],))
-            #u.start()
-            #u.join()
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
