@@ -186,6 +186,7 @@ class Bot(object):
         camera.resolution = (160, 160)
         camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
+        camera.stop_preview()
         #camera.capture(stream, format='jpeg')
         #stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
     	#image = Image.open(stream)
