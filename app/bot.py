@@ -28,6 +28,7 @@ SERVO_RANGE = [
 SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
+camera = PiCamera()
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
 # perform moves, then scan -- hence no moves before scanning U
@@ -172,7 +173,6 @@ class Bot(object):
     
     def save_snapshot(self):
        	#stream = BytesIO()
-        camera = PiCamera()
         camera.resolution = (160, 160)
         camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
