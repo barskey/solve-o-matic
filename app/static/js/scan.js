@@ -9,12 +9,6 @@ $( document ).ready( function() {
         "B": [135,100]
     }
 
-    const video = $( "#video" )[0]; // [0] gets the DOM object from the jquery object
-
-    const constraints = {
-        video: {width: {exact: 160}, height: {exact: 160}}
-    };
-
     function get_sites() {
         $.post( "/get_sites" )
         .done( function( response ) {
@@ -72,21 +66,6 @@ $( document ).ready( function() {
             }
         }
     }
-
-    // canvas for capturing img from video
-    const canvas = document.createElement( "canvas" );
-    canvas.width = 160;
-    canvas.height = 160;
-
-    // start the camera streaming
-    navigator.mediaDevices.getUserMedia( constraints ).then(
-        function(stream) {
-            console.log("Capturing video...");
-            video.srcObject = stream;
-        }, function(error) {
-            console.error("Error: ", error);
-        }
-    );
 
     $( "#scan-next" ).click( function() {
         if ($( this ).text() == "Start") {

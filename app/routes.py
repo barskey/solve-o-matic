@@ -22,15 +22,8 @@ def scan():
 
 @app.route('/calibration')
 def settings():
-	#stream = BytesIO()
-	camera = PiCamera()
-	camera.resolution = (160, 160)
-	camera.start_preview(fullscreen=False, window=(255,98,160,160))
-	camera.capture('cal_capture.jpg')
-	#camera.capture(stream, format='jpeg')
-	#stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
-	#image = Image.open(stream)
 	cal_data = json.load(open('app/calibrate.json'))
+	mybot.save_snapshot()
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data)
 
 @app.route('/set_cal_data', methods=['POST'])
