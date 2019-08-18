@@ -12,45 +12,8 @@ sudo apt-get install xserver-xorg-input-evdev
 sudo cp -rf /usr/share/X11/xorg.conf.d/10-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf
 sudo reboot
 
--Setup kiosk mode (https://obrienlabs.net/setup-raspberry-pi-kiosk-chromium/)
-- set auto-login from raspi-config
-nano /home/pi/.config/autostart/kiosk.desktop
--add the following
-[Desktop Entry]
-Type=Application
-Name=Kiosk
-Exec=/home/pi/kiosk.sh
-X-GNOME-Autostart-enabled=true
+-Setup kiosk mode (https://pimylifeup.com/raspberry-pi-kiosk/)
 
-nano /home/pi/kiosk.sh
-- add the following:
----- start kisok.sh -----
-#!/bin/bash
- 
-# Run this script in display 0 - the monitor
-export DISPLAY=:0
- 
-# Hide the mouse from the display
-unclutter &
- 
-# If Chrome crashes (usually due to rebooting), clear the crash flag so we don't have the annoying warning bar
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromium/Default/Preferences
-sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
- 
-# Run Chromium and open tabs
-/usr/bin/chromium-browser --window-size=480,320 --kiosk --window-position=0,0 http://localhost:5000 &
- 
-# Start the kiosk loop. This keystroke changes the Chromium tab
-# To have just anti-idle, use this line instead:
-# xdotool keydown ctrl; xdotool keyup ctrl;
-# Otherwise, the ctrl+Tab is designed to switch tabs in Chrome
-# #
-while (true)
- do
-  xdotool keydown ctrl+Tab; xdotool keyup ctrl+Tab;
-  sleep 15
-done
------ end kiosk.sh -----
 sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
 sudo apt-get install libopenjp2-7-dev
 sudo apt-get install libtiff5
