@@ -1,7 +1,7 @@
 import time
 import threading
 from app import rscube
-#from adafruit_servokit import ServoKit
+from adafruit_servokit import ServoKit
 from picamera import PiCamera
 import base64
 import io
@@ -27,7 +27,7 @@ SERVO_RANGE = [
 ]
 SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
 
-#kit = ServoKit(channels=8)
+kit = ServoKit(channels=8)
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
 # perform moves, then scan -- hence no moves before scanning U
@@ -64,9 +64,9 @@ class Bot(object):
     def init_servos(self):
         # initialize servo pulse ranges
         for channel in GRIP_CHANNEL.values():
-            pass#kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
         for channel in TWIST_CHANNEL.values():
-            pass#kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
 		# set both grippers to open/center position
         #for grip in ['A', 'B']:
             #self.kit.servo[self.grip_channel[grip]].angle = self._grip_pos[grip]['o']
@@ -246,4 +246,4 @@ def find_closest_color(color, colors_to_check):
 
 def set_servo_angle(s, a):
     print(s,a)
-    #kit.servo[s].angle = a
+    kit.servo[s].angle = a
