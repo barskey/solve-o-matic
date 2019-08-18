@@ -3,7 +3,7 @@ from flask import jsonify
 from app import app
 from app import calibration, bot
 import json
-#from picamera import PiCamera
+from picamera import PiCamera
 from io import BytesIO
 from PIL import Image
 import time
