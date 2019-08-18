@@ -178,6 +178,16 @@ class Bot(object):
                 self._scan_index = self._scan_index + 1
 
         return self._cube.get_up_face()
+    
+    def save_snapshot(self):
+       	#stream = BytesIO()
+        camera = PiCamera()
+        camera.resolution = (160, 160)
+        camera.start_preview(fullscreen=False, window=(255,98,160,160))
+        camera.capture('app/static/images/snapshot.jpg')
+        #camera.capture(stream, format='jpeg')
+        #stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
+    	#image = Image.open(stream)
 
     def process_face(self, face, img, sites):
         """
