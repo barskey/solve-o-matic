@@ -2,6 +2,7 @@ import time
 import threading
 from app import rscube
 #from adafruit_servokit import ServoKit
+from picamera import PiCamera
 import base64
 import io
 from PIL import Image, ImageStat
