@@ -5,6 +5,7 @@ from adafruit_servokit import ServoKit
 from picamera import PiCamera
 import base64
 import io
+from io import BytesIO
 from PIL import Image, ImageStat
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
