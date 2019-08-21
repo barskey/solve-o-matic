@@ -4,7 +4,6 @@ from app import rscube
 from adafruit_servokit import ServoKit
 from picamera import PiCamera
 import base64
-import io
 from io import BytesIO
 from PIL import Image, ImageStat
 from colormath.color_objects import sRGBColor, LabColor
@@ -172,14 +171,10 @@ class Bot(object):
         return self._cube.get_up_face()
     
     def save_snapshot(self):
-       	#stream = BytesIO()
         camera.resolution = (160, 160)
         #camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
-        #camera.capture(stream, format='jpeg')
-        #stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
-    	#image = Image.open(stream)
 
     def get_imagestream(self):
         stream = BytesIO()
@@ -189,7 +184,7 @@ class Bot(object):
         #camera.stop_preview()
         camera.capture(stream, format='jpeg')
         stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
-        image = Image.open(stream)
+        image = base64.b64encode(Image.open(stream)).decode("utf-8")
         return image
 
     def process_face(self, face, img, sites):
@@ -199,7 +194,7 @@ class Bot(object):
         Returns list of colors on this face for uix
         """
         img_decoded = base64.b64decode(img)
-        face_img = Image.open(io.BytesIO(img_decoded))
+        face_img = Image.open(BytesIO(img_decoded))
 
         # loop through each site and store its raw color
         sitenum = 0
