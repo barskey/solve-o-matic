@@ -173,7 +173,7 @@ class Bot(object):
     def save_snapshot(self):
        	#stream = BytesIO()
         camera.resolution = (160, 160)
-        #camera.start_preview(fullscreen=False, window=(255,98,160,160))
+        camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
         camera.capture(stream, format='jpeg')
