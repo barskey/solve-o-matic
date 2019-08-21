@@ -179,11 +179,9 @@ class Bot(object):
     def get_imagestream(self):
         stream = BytesIO()
         camera.resolution = (160, 160)
-        camera.start_preview(fullscreen=False, window=(255,98,160,160))
-        #camera.capture('app/static/images/snapshot.jpg')
+        #camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture(stream, format='jpeg')
-        time.sleep(1)
-        camera.stop_preview()
+        #camera.stop_preview()
         # "Rewind" the stream to the beginning so we can read its content
         stream.seek(0)
         return stream.getvalue()
