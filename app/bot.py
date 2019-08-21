@@ -91,9 +91,9 @@ class Bot(object):
             cal_data.GRIPB['cw']
         ]
         # move/rotate grippers to current/new positions
-        for g in ['A', 'B']:
-            self.grip(g, self._grip_state[g])
-            self.twist(g, tpk[self._twist_state[g]])
+        #for g in ['A', 'B']:
+        #    self.grip(g, self._grip_state[g])
+        #    self.twist(g, tpk[self._twist_state[g]])
 
     def grip(self, gripper, cmd):
         """
