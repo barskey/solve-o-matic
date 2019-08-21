@@ -183,7 +183,7 @@ class Bot(object):
         #camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
         camera.capture(stream, format='jpeg')
-        image = base64.b64encode(stream).decode('utf-8')
+        image = base64.b64encode(stream.getvalue()).decode('utf-8')
         return image
 
     def process_face(self, face, img, sites):
