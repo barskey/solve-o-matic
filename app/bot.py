@@ -183,6 +183,8 @@ class Bot(object):
         #camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
         camera.capture(stream, format='jpeg')
+        # "Rewind" the stream to the beginning so we can read its content
+        stream.seek(0)
         image = base64.b64encode(stream.getvalue()).decode('utf-8')
         return image
 
