@@ -4,6 +4,7 @@ from app import app
 from app import calibration, bot
 import json
 import time
+import base64
 
 cal = calibration.Calibration()
 mybot = bot.Bot(cal)
@@ -22,6 +23,7 @@ def settings():
 	cal_data = json.load(open('app/calibrate.json'))
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
+	image = base64.b64encode(image).decode('utf-8')
 	return render_template('calibration.html', title='Calibration', cal_data=cal_data, img=image)
 
 @app.route('/set_cal_data', methods=['POST'])

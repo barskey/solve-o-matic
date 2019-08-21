@@ -186,9 +186,7 @@ class Bot(object):
         camera.stop_preview()
         # "Rewind" the stream to the beginning so we can read its content
         stream.seek(0)
-        image = base64.b64encode(stream.getvalue()).decode('utf-8')
-        print(image)
-        return image
+        return stream.getvalue()
 
     def process_face(self, face, img, sites):
         """
