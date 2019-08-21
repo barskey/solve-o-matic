@@ -25,7 +25,7 @@ SERVO_RANGE = [
     (650, 2420),
     (680, 2410)
 ]
-SLEEP_TIME = 1.0 # time to sleep after sending servo cmd
+SLEEP_TIME = 0.1 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
 camera = PiCamera()
@@ -168,18 +168,28 @@ class Bot(object):
                 elif cmd in ['o', 'c', 'l']:
                     result = self.grip(gripper, cmd)
                 self._scan_index = self._scan_index + 1
-
         return self._cube.get_up_face()
     
     def save_snapshot(self):
        	#stream = BytesIO()
         camera.resolution = (160, 160)
-        camera.start_preview(fullscreen=False, window=(255,98,160,160))
+        #camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
-        #camera.capture(stream, format='jpeg')
+        camera.capture(stream, format='jpeg')
         #stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
     	#image = Image.open(stream)
+
+    def get_imagestream(self):
+        stream = BytesIO()
+        camera.resolution = (160, 160)
+        #camera.start_preview(fullscreen=False, window=(255,98,160,160))
+        #camera.capture('app/static/images/snapshot.jpg')
+        #camera.stop_preview()
+        camera.capture(stream, format='jpeg')
+        stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
+    	image = Image.open(stream)
+        return image
 
     def process_face(self, face, img, sites):
         """
