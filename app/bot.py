@@ -25,7 +25,7 @@ SERVO_RANGE = [
     (650, 2420),
     (680, 2410)
 ]
-SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
+SLEEP_TIME = 1.0 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
 camera = PiCamera()
