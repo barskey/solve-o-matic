@@ -188,7 +188,7 @@ class Bot(object):
         #camera.stop_preview()
         camera.capture(stream, format='jpeg')
         stream.seek(0) #  "Rewind" the stream to the beginning so we can read its content
-    	image = Image.open(stream)
+        image = Image.open(stream)
         return image
 
     def process_face(self, face, img, sites):
