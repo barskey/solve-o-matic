@@ -64,6 +64,9 @@ def scan_next():
 		return jsonify({'msg': result[1]})
 	else:
 		result = mybot.scan_move()
+		image = mybot.get_imagestream()
+		image = base64.b64encode(image).decode('utf-8')
+		mybot.process_face(image, cal.SITES)
 		return jsonify({'upface': result})
 
 @app.route('/process_img', methods=['POST'])

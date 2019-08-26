@@ -167,8 +167,8 @@ class Bot(object):
                         self._cube.set_orientation(gripper, cmd)
                 elif cmd in ['o', 'c', 'l']:
                     result = self.grip(gripper, cmd)
-                self._scan_index = self._scan_index + 1
-        return self._cube.get_up_face()
+        self._scan_index = self._scan_index + 1
+        return [0, 'Move done']
     
     def save_snapshot(self):
         camera.resolution = (160, 160)
@@ -211,11 +211,11 @@ class Bot(object):
                 if delta_e > THRESHOLD:
                     if len(self._colors) < 6: # store this color since list is not populated yet
                         self._colors.append(mean_color)
-                        self._cube.set_raw_color(face, sitenum, mean_color)
+                        self._cube.set_raw_color(self._cube.get_up_face(), sitenum, mean_color)
                     else:
                         unsure_sites.append(sitenum)
                 else:
-                    self._cube.set_raw_color(face, sitenum, match_color)
+                    self._cube.set_raw_color(self._cube.get_up_face(), sitenum, match_color)
                 
                 hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
                 face_colors[sitenum] = hex_color # return the hex color
