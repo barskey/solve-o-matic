@@ -81,27 +81,15 @@ $( document ).ready( function() {
             $( "#scan-status" ).text( "Moving to position..." );
             $.post( "/scan_next", { start: false })
             .done( function( response ) {
-                grabImage( response.upface );
+                drawFace( response.upface, response.colors );
+                //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
+                drawCamView( response.colors, response.unsure );
+                if ( response.unsure.length > 0 ) {
+                    console.warn("Unsure Sites!");
+                }
+                console.log(response.unsure);
             });
         }
     });
-
-    function grabImage( upface ) {
-        //draw image to canvas. scale to target dimensions
-        var ctx = canvas.getContext( "2d" );
-        ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
-        //convert to desired file format
-        var dataURI = canvas.toDataURL( 'image/png' );
-        $.post( '/process_img', { imgdata: dataURI, face: upface })
-        .done( function( response ) {
-            drawFace( response.face, response.colors );
-            //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
-            drawCamView( response.colors, response.unsure );
-            if ( response.unsure.length > 0 ) {
-                console.warn("Unsure Sites!");
-            }
-            console.log(response.unsure);
-        });
-    }
-
+    
 });

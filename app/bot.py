@@ -184,16 +184,15 @@ class Bot(object):
         #camera.stop_preview()
         # "Rewind" the stream to the beginning so we can read its content
         stream.seek(0)
-        return stream.getvalue()
+        return stream
 
-    def process_face(self, face, img, sites):
+    def process_face(self, sites):
         """
         Gets image from camera, crops and gets average (mean) colors
         in each region, and stores in _raw_colors.
         Returns list of colors on this face for uix
         """
-        img_decoded = base64.b64decode(img)
-        face_img = Image.open(BytesIO(img_decoded))
+        face_img = Image.open(BytesIO(self.get_imagestream()))
 
         # loop through each site and store its raw color
         sitenum = 0
@@ -221,7 +220,7 @@ class Bot(object):
                 face_colors[sitenum] = hex_color # return the hex color
                 sitenum = sitenum + 1
         print(self._colors)
-        return {'face_colors': face_colors, 'unsure_sites': unsure_sites}
+        return {'colors': face_colors, 'unsure': unsure_sites, 'upface': self._cube.get_up_face()}
 
 
 def find_closest_color(color, colors_to_check):

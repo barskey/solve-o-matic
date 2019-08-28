@@ -23,8 +23,8 @@ def settings():
 	cal_data = json.load(open('app/calibrate.json'))
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
-	image = base64.b64encode(image).decode('utf-8')
-	return render_template('calibration.html', title='Calibration', cal_data=cal_data, img=image)
+	img = base64.b64encode(image.getvalue()).decode('utf-8')
+	return render_template('calibration.html', title='Calibration', cal_data=cal_data, img=img)
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
@@ -61,18 +61,9 @@ def move_gripper():
 def scan_next():
 	if request.form['start'] == 'true':
 		result = mybot.scan_cube()
-		return jsonify({'msg': result[1]})
+		return jsonify({'msg': result[1], 'result': result[0]})
 	else:
 		result = mybot.scan_move()
-		image = mybot.get_imagestream()
-		image = base64.b64encode(image).decode('utf-8')
-		mybot.process_face(image, cal.SITES)
-		return jsonify({'upface': result})
-
-@app.route('/process_img', methods=['POST'])
-def process_img():
-	face = request.form['face']
-	header,img = request.form['imgdata'].split(',') # get image from post data
-	result = mybot.process_face(face, img, cal.SITES)
-
-	return jsonify({'colors': result['face_colors'], 'face': face, 'unsure': result['unsure_sites']})
+		if result[0] == 0:
+			r = mybot.process_face(cal.SITES)
+			return jsonify(r)
