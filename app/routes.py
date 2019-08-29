@@ -16,7 +16,9 @@ def index():
 	
 @app.route('/scan')
 def scan():
-	return render_template('scan.html', title='Scan')
+	image = mybot.get_imagestream()
+	img = base64.b64encode(image.getvalue()).decode('utf-8')
+	return render_template('scan.html', title='Scan', img=img)
 
 @app.route('/calibration')
 def settings():
