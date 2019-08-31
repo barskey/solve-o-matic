@@ -67,5 +67,5 @@ def scan_next():
 	else:
 		result = mybot.scan_move()
 		if result[0] == 0:
-			#r = mybot.process_face(cal.SITES)
+			r = mybot.process_face(cal.SITES)
 			return jsonify({'colors': [], 'unsure': [], 'upface': 'U'})
