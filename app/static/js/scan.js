@@ -13,7 +13,7 @@ $( document ).ready( function() {
         $.post( "/get_sites" )
         .done( function( response ) {
             sites = response.sites;
-            draw_sites();
+            //draw_sites();
         });
     }
 
@@ -71,7 +71,7 @@ $( document ).ready( function() {
         if ($( this ).text() == "Start") {
             $( this ).attr( { "disabled": true } );
             $( "#scan-status" ).text( "Gripping..." );
-            $.post( "/scan_next", { start: true })
+            $.post( "/scan_next", { start: "true" })
             .done( function ( response ) {
                 $( "#scan-next" ).removeAttr( "disabled" ).text( "Next..." );
                 $( "#scan-status" ).html( "Does everything look OK?<br />Adjust position if necessary." );
@@ -79,7 +79,7 @@ $( document ).ready( function() {
         } else {
             $( this ).attr( { "disabled": true } );
             $( "#scan-status" ).text( "Moving to position..." );
-            $.post( "/scan_next", { start: false })
+            $.post( "/scan_next", { start: "false" })
             .done( function( response ) {
                 drawFace( response.upface, response.colors );
                 //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
