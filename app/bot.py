@@ -204,11 +204,11 @@ class Bot(object):
                 upper = sites['tly'] + (row * sites['pitch'])
                 box = (left, upper, left + sites['size'], upper + sites['size'])
                 site = face_img.crop(box) # crop the img so only the site is left
-                site.save('r{}c{}.jpg'.format(row, col))
+                #site.save('r{}c{}.jpg'.format(row, col))
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
                 match_color, delta_e = find_closest_color(mean_color, self._colors)
-                #print (match_color, delta_e) # debug
+                print (match_color, delta_e) # debug
                 if delta_e > THRESHOLD:
                     if len(self._colors) < 6: # store this color since list is not populated yet
                         self._colors.append(mean_color)
