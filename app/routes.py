@@ -66,6 +66,6 @@ def scan_next():
 		return jsonify({'msg': result[1], 'result': result[0]})
 	else:
 		result = mybot.scan_move()
-		if result[0] == 0:
-			r = mybot.process_face(cal.SITES)
-			return jsonify(r)
+		#if result[0] == 0:
+		r = mybot.process_face(cal.SITES)
+		return jsonify(r)
