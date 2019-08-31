@@ -19,7 +19,12 @@ canvas {
     z-index: 10;
 }
 
-#screenshot canvas {
-    left: 0;
+#sites-canvas {
+    left: 15px;
+    top: 0;
+}
+
+#cam-view {
+    left: 40px;
     top: 0;
 }
