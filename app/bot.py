@@ -225,7 +225,7 @@ class Bot(object):
 
 def find_closest_color(color, colors_to_check):
 	# create Color object from site color and convert to lab color for comparison
-	r, g, b, a = (x / 255.0 for x in color)
+	r, g, b = (x / 255.0 for x in color)
 	site_color_lab = convert_color(sRGBColor(r, g, b), LabColor)
 	last_delta_e = 999
 	match_color = None
