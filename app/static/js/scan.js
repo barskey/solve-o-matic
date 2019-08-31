@@ -87,7 +87,7 @@ $( document ).ready( function() {
                 //if ( response.unsure.length > 0 ) {
                 //    console.warn("Unsure Sites!");
                 //}
-                console.log(response.unsure);
+                console.log(response);
             });
         }
     });
