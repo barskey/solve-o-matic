@@ -157,16 +157,16 @@ class Bot(object):
         if self._scan_index >= len(MOVES_FOR_SCAN):
             return 'Done!'
 
-        for move in MOVES_FOR_SCAN[self._scan_index]:
-            if len(move) > 0:
-                gripper = move[0]
-                cmd = move[1]
-                if cmd in ['+', '-']:
-                    result = self.twist(gripper, cmd)
-                    if result[0] == 0:
-                        self._cube.set_orientation(gripper, cmd)
-                elif cmd in ['o', 'c', 'l']:
-                    result = self.grip(gripper, cmd)
+        #for move in MOVES_FOR_SCAN[self._scan_index]:
+        #    if len(move) > 0:
+        #        gripper = move[0]
+        #        cmd = move[1]
+        #        if cmd in ['+', '-']:
+        #            result = self.twist(gripper, cmd)
+        #            if result[0] == 0:
+        #                self._cube.set_orientation(gripper, cmd)
+        #        elif cmd in ['o', 'c', 'l']:
+        #            result = self.grip(gripper, cmd)
         self._scan_index = self._scan_index + 1
         return [0, 'Move done']
     
