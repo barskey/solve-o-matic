@@ -230,7 +230,7 @@ def find_closest_color(color, colors_to_check):
 	last_delta_e = 999
 	match_color = None
 	for c in colors_to_check:
-		r, g, b, a = (x / 255.0 for x in c)
+		r, g, b = (x / 255.0 for x in c)
 		check_color_lab = convert_color(sRGBColor(r, g, b), LabColor) # convert to lab color for comparison
 		delta_e = delta_e_cie2000(site_color_lab, check_color_lab)
 		if delta_e < last_delta_e: # use this check to find the closest match
