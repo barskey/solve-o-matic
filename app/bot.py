@@ -221,7 +221,7 @@ class Bot(object):
                 hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
                 face_colors[sitenum] = hex_color # return the hex color
                 sitenum = sitenum + 1
-        #print(self._colors)
+        print(self._colors)
         return {'colors': face_colors, 'unsure': unsure_sites, 'upface': self._cube.get_up_face()}
 
 
