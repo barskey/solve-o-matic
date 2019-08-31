@@ -192,7 +192,7 @@ class Bot(object):
         in each region, and stores in _raw_colors.
         Returns list of colors on this face for uix
         """
-        face_img = Image.open(BytesIO(self.get_imagestream()))
+        face_img = Image.open(self.get_imagestream())
 
         # loop through each site and store its raw color
         sitenum = 0
