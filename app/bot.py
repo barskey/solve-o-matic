@@ -6,6 +6,8 @@ from picamera import PiCamera
 import base64
 from io import BytesIO
 from PIL import Image, ImageStat
+import numpy as np
+import colorsys
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
@@ -20,9 +22,9 @@ THRESHOLD = 10
 GRIP_CHANNEL = {'A': 1, 'B': 3}
 TWIST_CHANNEL = {'A': 0, 'B': 2}
 SERVO_RANGE = [
-    (570, 2330),
+    (520, 2330),
     (750, 2250),
-    (650, 2420),
+    (480, 2520),
     (680, 2410)
 ]
 SLEEP_TIME = 0.1 # time to sleep after sending servo cmd
@@ -207,6 +209,11 @@ class Bot(object):
                 #site.save('r{}c{}.jpg'.format(row, col))
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
+                r = mean_color[0] / 255
+                g = mean_color[1] / 255
+                b = mean_color[2] / 255
+                h,s,v = colorsys.rgb_to_hsv(r,g,b)
+                print(h,s,v)
                 match_color, delta_e = find_closest_color(mean_color, self._colors)
                 print (match_color, delta_e) # debug
                 if delta_e > THRESHOLD:
