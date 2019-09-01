@@ -210,7 +210,7 @@ class Bot(object):
                 #site.save('r{}c{}.jpg'.format(row, col))
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
-                c = Colorfrom_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
+                c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
                 #print(c)
                 #print(c.hsv)
                 h,s,v = c.hsv
