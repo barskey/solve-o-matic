@@ -31,6 +31,10 @@ SLEEP_TIME = 0.1 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
 camera = PiCamera()
+camera.resolution = (160, 160)
+camera.iso = 100
+camera.awb_mode = 'off'
+camera.shutter_speed = camera.exposure_speed
 
 # with cube starting in UFD, these sides can be rotated to scan each side in proper rotation (0)
 # perform moves, then scan -- hence no moves before scanning U
@@ -173,16 +177,14 @@ class Bot(object):
         return [0, 'Move done']
     
     def save_snapshot(self):
-        camera.resolution = (160, 160)
         #camera.start_preview(fullscreen=False, window=(255,98,160,160))
         camera.capture('app/static/images/snapshot.jpg')
         #camera.stop_preview()
 
     def get_imagestream(self):
         stream = BytesIO()
-        camera.resolution = (160, 160)
         #camera.start_preview(fullscreen=False, window=(255,98,160,160))
-        camera.capture(stream, 'rgb')
+        camera.capture(stream, 'jpeg')
         #camera.stop_preview()
         # "Rewind" the stream to the beginning so we can read its content
         stream.seek(0)
@@ -209,10 +211,8 @@ class Bot(object):
                 #site.save('r{}c{}.jpg'.format(row, col))
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
-                r = mean_color[0] / 255
-                g = mean_color[1] / 255
-                b = mean_color[2] / 255
                 print('mr:{} mg:{} mb:{}'.format(mean_color[0], mean_color[1], mean_color[2]))
+                r,g,b = x/255 for x in mean_color
                 print('r:{} g:{} b:{}'.format(r,g,b))
                 h,s,v = colorsys.rgb_to_hsv(r,g,b)
                 print('h:{} s:{} v:{}'.format(h,s,v))
