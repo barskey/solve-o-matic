@@ -214,18 +214,16 @@ class Bot(object):
                 #print(c.rgb)
                 print(c.hsv)
                 h,s,v = c.hsv
-                if s <= 0.6 and v >= 150/255:
+                if s <= 0.1:
                     print('r{}c{}: white'.format(row, col))
-                elif 6/360 <= h < 23/360:
+                elif 0.01 <= h < 0.1:
                     print('r{}c{}: orange'.format(row, col))
-                elif 23/360 <= h < 50/360:
+                elif 0.1 <= h < 0.2:
                     print('r{}c{}: yellow'.format(row, col))
-                elif 50/360 <= h <= 100/360:
-                    print('r{}c{} s:{}'.format(row,col,s))
-                    print('s>=150 is green, else white')
-                elif 100/360 <= h < 160/360:
-                    print('r{}c{} s:{}'.format(row,col,s))
-                    print('s>=150 is blue, else white')
+                elif 0.2 <= h <= 0.4:
+                    print('r{}c{} green'.format(row,col))
+                elif 0.5 <= h < 0.65:
+                    print('r{}c{} blue'.format(row,col))
                 else:
                     print('r{}c{}: red'.format(row, col))
 
