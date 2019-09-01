@@ -214,32 +214,39 @@ class Bot(object):
                 #print(c.rgb)
                 #print(c.hsv)
                 h,s,v = c.hsv
+                site_color = None
                 if s <= 0.2:
-                    print('r{}c{}: white'.format(row, col))
+                    site_color = Color('white')
+                    #print('r{}c{}: white'.format(row, col))
                 elif 0.01 <= h < 0.1:
-                    print('r{}c{}: orange'.format(row, col))
+                    site_color = Color('orange')
+                    #print('r{}c{}: orange'.format(row, col))
                 elif 0.1 <= h < 0.2:
-                    print('r{}c{}: yellow'.format(row, col))
+                    site_color = Color('yellow')
+                    #print('r{}c{}: yellow'.format(row, col))
                 elif 0.2 <= h <= 0.4:
-                    print('r{}c{} green'.format(row,col))
+                    site_color = Color('green')
+                    #print('r{}c{} green'.format(row,col))
                 elif 0.5 <= h < 0.7:
-                    print('r{}c{} blue'.format(row,col))
+                    site_color = Color('blue')
+                    #print('r{}c{} blue'.format(row,col))
                 else:
-                    print('r{}c{}: red'.format(row, col))
+                    site_color = Color('red')
+                    #print('r{}c{}: red'.format(row, col))
 
-                match_color, delta_e = find_closest_color(mean_color, self._colors)
+                #match_color, delta_e = find_closest_color(mean_color, self._colors)
                 #print (match_color, delta_e) # debug
-                if delta_e > THRESHOLD:
-                    if len(self._colors) < 6: # store this color since list is not populated yet
-                        self._colors.append(mean_color)
-                        self._cube.set_raw_color(self._cube.get_up_face(), sitenum, mean_color)
-                    else:
-                        unsure_sites.append(sitenum)
-                else:
-                    self._cube.set_raw_color(self._cube.get_up_face(), sitenum, match_color)
+                #if delta_e > THRESHOLD:
+                #    if len(self._colors) < 6: # store this color since list is not populated yet
+                #        self._colors.append(mean_color)
+                #        self._cube.set_raw_color(self._cube.get_up_face(), sitenum, mean_color)
+                #    else:
+                #        unsure_sites.append(sitenum)
+                #else:
+                #    self._cube.set_raw_color(self._cube.get_up_face(), sitenum, match_color)
                 
-                hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
-                face_colors[sitenum] = hex_color # return the hex color
+                #hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
+                face_colors[sitenum] = str(site_color) # return the hex color
                 sitenum = sitenum + 1
         #print(self._colors)
         return {'colors': face_colors, 'unsure': unsure_sites, 'upface': self._cube.get_up_face()}
