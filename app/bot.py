@@ -2,7 +2,7 @@ import time
 import threading
 from app import rscube
 from adafruit_servokit import ServoKit
-from picamera import PiCamera
+from picamera import PiCamera, Color
 import base64
 from io import BytesIO
 from PIL import Image, ImageStat
@@ -65,7 +65,6 @@ class Bot(object):
         self.init_servos() # initialize servos to their default ranges/positions
         self.camera = PiCamera()
         self.camera.resolution = (160, 160)
-        self.camera.iso = 100
         time.sleep(1)
         self.camera.shutter_speed = self.camera.exposure_speed
         self.camera.exposure_mode = 'off'
@@ -217,6 +216,8 @@ class Bot(object):
                 #site.save('r{}c{}.jpg'.format(row, col))
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
+                c = Color(mean_color[0], mean_color[1], mean_color[2])
+                print(c)
                 print('mr:{} mg:{} mb:{}'.format(mean_color[0], mean_color[1], mean_color[2]))
                 r,g,b = (x/255 for x in mean_color)
                 print('r:{} g:{} b:{}'.format(r,g,b))
