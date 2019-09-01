@@ -212,7 +212,7 @@ class Bot(object):
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
                 #print(c.rgb)
-                print(c.hsv)
+                #print(c.hsv)
                 h,s,v = c.hsv
                 if s <= 0.1:
                     print('r{}c{}: white'.format(row, col))
@@ -222,7 +222,7 @@ class Bot(object):
                     print('r{}c{}: yellow'.format(row, col))
                 elif 0.2 <= h <= 0.4:
                     print('r{}c{} green'.format(row,col))
-                elif 0.5 <= h < 0.65:
+                elif 0.5 <= h < 0.7:
                     print('r{}c{} blue'.format(row,col))
                 else:
                     print('r{}c{}: red'.format(row, col))
