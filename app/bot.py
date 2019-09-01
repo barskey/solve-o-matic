@@ -212,10 +212,11 @@ class Bot(object):
                 r = mean_color[0] / 255
                 g = mean_color[1] / 255
                 b = mean_color[2] / 255
+                print('r:{} g:{} b:{}'.format(r,g,b))
                 h,s,v = colorsys.rgb_to_hsv(r,g,b)
-                print(h,s,v)
+                print('h:{} s:{} v:{}'.format(h,s,v))
                 match_color, delta_e = find_closest_color(mean_color, self._colors)
-                print (match_color, delta_e) # debug
+                #print (match_color, delta_e) # debug
                 if delta_e > THRESHOLD:
                     if len(self._colors) < 6: # store this color since list is not populated yet
                         self._colors.append(mean_color)
@@ -228,7 +229,7 @@ class Bot(object):
                 hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
                 face_colors[sitenum] = hex_color # return the hex color
                 sitenum = sitenum + 1
-        print(self._colors)
+        #print(self._colors)
         return {'colors': face_colors, 'unsure': unsure_sites, 'upface': self._cube.get_up_face()}
 
 
