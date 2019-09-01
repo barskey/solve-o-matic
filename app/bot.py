@@ -212,7 +212,7 @@ class Bot(object):
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
                 print('mr:{} mg:{} mb:{}'.format(mean_color[0], mean_color[1], mean_color[2]))
-                r,g,b = x/255 for x in mean_color
+                r,g,b = (x/255 for x in mean_color)
                 print('r:{} g:{} b:{}'.format(r,g,b))
                 h,s,v = colorsys.rgb_to_hsv(r,g,b)
                 print('h:{} s:{} v:{}'.format(h,s,v))
