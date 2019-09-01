@@ -211,23 +211,23 @@ class Bot(object):
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
-                #print(c)
+                print(c.rgb)
                 #print(c.hsv)
                 h,s,v = c.hsv
                 if s <= 0.6 and v >= 150/255:
-                    print('r{} c{}: white'.format(row, col))
+                    print('r{}c{}: white'.format(row, col))
                 elif 6/360 <= h < 23/360:
-                    print('r{} c{}: orange'.format(row, col))
+                    print('r{}c{}: orange'.format(row, col))
                 elif 23/360 <= h < 50/360:
-                    print('r{} c{}: yellow'.format(row, col))
+                    print('r{}c{}: yellow'.format(row, col))
                 elif 50/360 <= h <= 100/360:
-                    print('r{} c{} s:{}'.format(row,col,s))
+                    print('r{}c{} s:{}'.format(row,col,s))
                     print('s>=150 is green, else white')
                 elif 100/360 <= h < 160/360:
-                    print('r{} c{} s:{}'.format(row,col,s))
+                    print('r{}c{} s:{}'.format(row,col,s))
                     print('s>=150 is blue, else white')
                 else:
-                    print('r{} c{}: red'.format(row, col))
+                    print('r{}c{}: red'.format(row, col))
 
                 match_color, delta_e = find_closest_color(mean_color, self._colors)
                 #print (match_color, delta_e) # debug
