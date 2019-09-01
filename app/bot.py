@@ -65,13 +65,6 @@ class Bot(object):
         self.init_servos() # initialize servos to their default ranges/positions
         self.camera = PiCamera()
         self.camera.resolution = (160, 160)
-        time.sleep(1)
-        self.camera.shutter_speed = self.camera.exposure_speed
-        self.camera.exposure_mode = 'off'
-        g = self.camera.awb_gains
-        self.camera.awb_mode = 'off'
-        self.camera.awb_gains = g
-
     
     def init_servos(self):
         # initialize servo pulse ranges
@@ -219,11 +212,6 @@ class Bot(object):
                 c = Color(mean_color[0], mean_color[1], mean_color[2])
                 print(c)
                 print(c.hsv)
-                print('mr:{} mg:{} mb:{}'.format(mean_color[0], mean_color[1], mean_color[2]))
-                r,g,b = (x/255 for x in mean_color)
-                print('r:{} g:{} b:{}'.format(r,g,b))
-                h,s,v = colorsys.rgb_to_hsv(r,g,b)
-                print('h:{} s:{} v:{}'.format(h,s,v))
                 match_color, delta_e = find_closest_color(mean_color, self._colors)
                 #print (match_color, delta_e) # debug
                 if delta_e > THRESHOLD:
