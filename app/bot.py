@@ -65,6 +65,7 @@ class Bot(object):
         self.init_servos() # initialize servos to their default ranges/positions
         self.camera = PiCamera()
         self.camera.resolution = (160, 160)
+        self.camera.iso = 400
     
     def init_servos(self):
         # initialize servo pulse ranges
