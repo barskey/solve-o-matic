@@ -211,8 +211,8 @@ class Bot(object):
                 #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
-                print(c.rgb)
-                #print(c.hsv)
+                #print(c.rgb)
+                print(c.hsv)
                 h,s,v = c.hsv
                 if s <= 0.6 and v >= 150/255:
                     print('r{}c{}: white'.format(row, col))
