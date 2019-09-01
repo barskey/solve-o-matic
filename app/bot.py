@@ -218,6 +218,7 @@ class Bot(object):
                 mean_color = ImageStat.Stat(site).mean
                 c = Color(mean_color[0], mean_color[1], mean_color[2])
                 print(c)
+                print(c.hsv)
                 print('mr:{} mg:{} mb:{}'.format(mean_color[0], mean_color[1], mean_color[2]))
                 r,g,b = (x/255 for x in mean_color)
                 print('r:{} g:{} b:{}'.format(r,g,b))
