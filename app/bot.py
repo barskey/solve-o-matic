@@ -214,7 +214,7 @@ class Bot(object):
                 #print(c.rgb)
                 #print(c.hsv)
                 h,s,v = c.hsv
-                if s <= 0.1:
+                if s <= 0.2:
                     print('r{}c{}: white'.format(row, col))
                 elif 0.01 <= h < 0.1:
                     print('r{}c{}: orange'.format(row, col))
