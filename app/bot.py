@@ -21,12 +21,6 @@ THRESHOLD = 10
 # channels on servo pwm board
 GRIP_CHANNEL = {'A': 1, 'B': 3}
 TWIST_CHANNEL = {'A': 0, 'B': 2}
-SERVO_RANGE = [
-    (520, 2330),
-    (750, 2250),
-    (480, 2520),
-    (680, 2410)
-]
 SLEEP_TIME = 0.1 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
@@ -58,6 +52,12 @@ class Bot(object):
         'A': [0, 0, 0],
         'B': [0, 0, 0]
     }
+    _servo_range = [
+        (520, 2450),
+        (750, 2250),
+        (480, 2520),
+        (680, 2410)
+    ]
 
     def __init__(self, cal_data):
         self._cube = rscube.MyCube()
@@ -70,9 +70,9 @@ class Bot(object):
     def init_servos(self):
         # initialize servo pulse ranges
         for channel in GRIP_CHANNEL.values():
-            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+            kit.servo[channel].set_pulse_width_range(*self._servo_range[channel])
         for channel in TWIST_CHANNEL.values():
-            kit.servo[channel].set_pulse_width_range(*SERVO_RANGE[channel])
+            kit.servo[channel].set_pulse_width_range(*self._servo_range[channel])
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
@@ -95,6 +95,7 @@ class Bot(object):
             cal_data.GRIPB['center'],
             cal_data.GRIPB['cw']
         ]
+        self._servo_range = cal_data["ranges"]
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
