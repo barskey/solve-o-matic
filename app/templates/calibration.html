@@ -12,6 +12,9 @@
 					<a class="nav-link active" id="sites-tab" data-toggle="tab" href="#sites">Sites</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" id="ranges-tab" data-toggle="tab" href="#ranges">Ranges</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" id="calibrate-tab" data-toggle="tab" href="#calibrate">Calibrate</a>
 				</li>
 				<li class="nav-item">
@@ -56,6 +59,30 @@
 							<img src="data:image/jpeg;base64,{{ img }}" width="160" height="160">
 							<canvas width="160" height="160" class="position-absolute" id="sites-canvas"></canvas>
 						</div>
+					</div>
+				</div>
+				<div class="container-fluid tap-pane" id="ranges">
+					<div class="row">
+						<button type="button" class="btn btn-info" id="gripa-gripa-min"></button>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<button type="button" class="btn btn-outline-secondary" id="gripa-min-dec"><i class="fa fa-minus-square"></i></button>
+							</div>
+							<input type="text" class="form-control" readonly id="gripa-range-min">
+							<div class="input-group-append">
+								<button type="button" class="btn btn-outline-secondary" id="gripa-min-inc"><i class="fa fa-plus-square"></i></button>
+							</div>
+						</div>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<button type="button" class="btn btn-outline-secondary" id="gripa-max-dec"><i class="fa fa-minus-square"></i></button>
+							</div>
+							<input type="text" class="form-control" readonly id="gripa-range-max">
+							<div class="input-group-append">
+								<button type="button" class="btn btn-outline-secondary" id="gripa-max-inc"><i class="fa fa-plus-square"></i></button>
+							</div>
+						</div>
+						<button type="button" class="btn btn-info" id="gripa-range-max"></button>
 					</div>
 				</div>
 				<div class="container-fluid tab-pane" id="calibrate">
