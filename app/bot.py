@@ -95,7 +95,7 @@ class Bot(object):
             cal_data.GRIPB['center'],
             cal_data.GRIPB['cw']
         ]
-        self._servo_range = cal_data["ranges"]
+        self._servo_range = cal_data.RANGES
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
