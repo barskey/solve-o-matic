@@ -66,7 +66,7 @@ class Calibration(object):
             self.GRIPB[param] = value
         elif prop == "colors":
             self.COLORS[param] = value
-        elif prop === "ranges":
+        elif prop == "ranges":
             self.RANGES[int(param)] = value
         self.write_to_file()
 
