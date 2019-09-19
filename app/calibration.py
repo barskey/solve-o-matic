@@ -37,6 +37,7 @@ class Calibration(object):
             'blue': calibrate['colors']['blue'],
             'white': calibrate['colors']['white'],
         }
+        self.RANGES = calibrate['ranges']
 
     def get_property(self, prop, param):
         value = None
@@ -50,6 +51,8 @@ class Calibration(object):
             value = self.GRIPB[param]
         elif prop == "colors":
             value = self.COLORS[param]
+        elif prop == "ranges":
+            value = self.RANGES[int(param)]
         return value
 
     def set_property(self, prop, param, value):
@@ -63,6 +66,8 @@ class Calibration(object):
             self.GRIPB[param] = value
         elif prop == "colors":
             self.COLORS[param] = value
+        elif prop === "ranges":
+            self.RANGES[int(param)] = value
         self.write_to_file()
 
     def write_to_file(self):
@@ -71,7 +76,8 @@ class Calibration(object):
             'sites': self.SITES,
             'gripa': self.GRIPA,
             'gripb': self.GRIPB,
-            'colors': self.COLORS
+            'colors': self.COLORS,
+            'ranges': self.RANGES
         }
         with open('app/calibrate.json', 'w') as outfile:
             json.dump(data, outfile)
