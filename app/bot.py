@@ -71,8 +71,10 @@ class Bot(object):
         # initialize servo pulse ranges
         for g,channel in GRIP_CHANNEL.items():
             kit.servo[channel].set_pulse_width_range(*self._servo_range['g' + g])
+            print(self._servo_range['g' + g])
         for g,channel in TWIST_CHANNEL.items():
             kit.servo[channel].set_pulse_width_range(*self._servo_range['t' + g])
+            print(self._servo_range['t' + g])
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
@@ -99,6 +101,7 @@ class Bot(object):
         self._servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
         self._servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
         self._servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
+        print(self._servo_range)
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
