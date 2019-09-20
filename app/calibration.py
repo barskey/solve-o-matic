@@ -2,42 +2,53 @@ import json
 
 class Calibration(object):
     def __init__(self):
-        calibrate = json.load(open('app/calibrate.json'))
+        caldata = json.load(open('app/calibrate.json'))
         self.CROP = {
-            'tl': calibrate['crop']['tl'],
-            'size': calibrate['crop']['size']
+            'tl': caldata['crop']['tl'],
+            'size': caldata['crop']['size']
         }
         self.SITES = {
-            'tlx': calibrate['sites']['tlx'],
-            'tly': calibrate['sites']['tly'],
-            'size': calibrate['sites']['size'],
-            'pitch': calibrate['sites']['pitch']
+            'tlx': caldata['sites']['tlx'],
+            'tly': caldata['sites']['tly'],
+            'size': caldata['sites']['size'],
+            'pitch': caldata['sites']['pitch']
         }
         self.GRIPA = {
-            'open': calibrate['gripa']['open'],
-            'close': calibrate['gripa']['close'],
-            'load': calibrate['gripa']['load'],
-            'ccw': calibrate['gripa']['ccw'],
-            'cw': calibrate['gripa']['cw'],
-            'center': calibrate['gripa']['center']
+            'open': caldata['gripa']['open'],
+            'close': caldata['gripa']['close'],
+            'load': caldata['gripa']['load'],
+            'ccw': caldata['gripa']['ccw'],
+            'cw': caldata['gripa']['cw'],
+            'center': caldata['gripa']['center'],
+            'min': caldata['gripa']['min'],
+            'max': caldata['gripa']['max']
         }
         self.GRIPB = {
-            'open': calibrate['gripb']['open'],
-            'close': calibrate['gripb']['close'],
-            'load': calibrate['gripb']['load'],
-            'ccw': calibrate['gripb']['ccw'],
-            'cw': calibrate['gripb']['cw'],
-            'center': calibrate['gripb']['center']
+            'open': caldata['gripb']['open'],
+            'close': caldata['gripb']['close'],
+            'load': caldata['gripb']['load'],
+            'ccw': caldata['gripb']['ccw'],
+            'cw': caldata['gripb']['cw'],
+            'center': caldata['gripb']['center'],
+            'min': caldata['gripb']['min'],
+            'max': caldata['gripb']['max']
+        }
+        self.TWISTA = {
+            'min': caldata['twista']['min'],
+            'max': caldata['twista']['max']
+        }
+        self.TWISTB = {
+            'min': caldata['twistb']['min'],
+            'max': caldata['twistb']['max']
         }
         self.COLORS = {
-            'red': calibrate['colors']['red'],
-            'orange': calibrate['colors']['orange'],
-            'yellow': calibrate['colors']['yellow'],
-            'green': calibrate['colors']['green'],
-            'blue': calibrate['colors']['blue'],
-            'white': calibrate['colors']['white'],
+            'red': caldata['colors']['red'],
+            'orange': caldata['colors']['orange'],
+            'yellow': caldata['colors']['yellow'],
+            'green': caldata['colors']['green'],
+            'blue': caldata['colors']['blue'],
+            'white': caldata['colors']['white'],
         }
-        self.RANGES = calibrate['ranges']
 
     def get_property(self, prop, param):
         value = None
@@ -49,10 +60,12 @@ class Calibration(object):
             value = self.GRIPA[param]
         elif prop == "gripb":
             value = self.GRIPB[param]
+        elif prop == "twista":
+            value = self.TWISTA[param]
+        elif prop == "twistb":
+            value = self.TWISTB[param]
         elif prop == "colors":
             value = self.COLORS[param]
-        elif prop == "ranges":
-            value = self.RANGES[int(param)]
         return value
 
     def set_property(self, prop, param, value):
@@ -64,10 +77,12 @@ class Calibration(object):
             self.GRIPA[param] = value
         elif prop == "gripb":
             self.GRIPB[param] = value
+        elif prop == "twista":
+            self.TWISTA[param] = value
+        elif prop == "twistb":
+            self.TWISTB[param] = value
         elif prop == "colors":
             self.COLORS[param] = value
-        elif prop == "ranges":
-            self.RANGES[int(param)] = value
         self.write_to_file()
 
     def write_to_file(self):
@@ -76,8 +91,9 @@ class Calibration(object):
             'sites': self.SITES,
             'gripa': self.GRIPA,
             'gripb': self.GRIPB,
-            'colors': self.COLORS,
-            'ranges': self.RANGES
+            'twista': self.TWISTA,
+            'twistb': self.TWISTB,
+            'colors': self.COLORS
         }
         with open('app/calibrate.json', 'w') as outfile:
             json.dump(data, outfile)

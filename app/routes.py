@@ -32,14 +32,14 @@ def settings():
 def set_calibrate():
 	prop = request.form['prop']
 	setting = request.form['setting']
-	mod = request.form['mod']
+	value = request.form['val']
 
-	delta = 1 if mod == 'more' else -1
-		
-	new_value = cal.get_property(prop, setting) + delta
+	new_value = cal.get_property(prop, setting) + int(value)
 
 	cal.set_property(prop, setting, new_value)
 	mybot.update_cal(cal)
+	if setting in ['min', 'max']:
+		mybot.init_servos()
 	
 	return jsonify({'prop': prop, 'setting': setting, 'value': new_value})
 
@@ -55,6 +55,8 @@ def move_gripper():
 	if cmd in ['open', 'load', 'close']:
 		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
 	elif cmd in ['ccw', 'center', 'cw']:
+		result = mybot.twist(gripper, cmd)
+	elif cmd in ['min', 'max']:
 		result = mybot.twist(gripper, cmd)
 	
 	return jsonify({'code': result[0], 'msg': result[1]})

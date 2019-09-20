@@ -52,12 +52,12 @@ class Bot(object):
         'A': [0, 0, 0],
         'B': [0, 0, 0]
     }
-    _servo_range = [
-        (520, 2450),
-        (750, 2250),
-        (480, 2520),
-        (680, 2410)
-    ]
+    _servo_range = {
+        'gA': [520, 2450],
+        'gB': [750, 2250],
+        'tA': [750, 2250],
+        'tB': [680, 2410]
+    }
 
     def __init__(self, cal_data):
         self._cube = rscube.MyCube()
@@ -69,10 +69,10 @@ class Bot(object):
     
     def init_servos(self):
         # initialize servo pulse ranges
-        for channel in GRIP_CHANNEL.values():
-            kit.servo[channel].set_pulse_width_range(*self._servo_range[channel])
-        for channel in TWIST_CHANNEL.values():
-            kit.servo[channel].set_pulse_width_range(*self._servo_range[channel])
+        for g,channel in GRIP_CHANNEL.items():
+            kit.servo[channel].set_pulse_width_range(*self._servo_range['g' + g])
+        for g,channel in TWIST_CHANNEL.items():
+            kit.servo[channel].set_pulse_width_range(*self._servo_range['t' + g])
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
@@ -95,7 +95,10 @@ class Bot(object):
             cal_data.GRIPB['center'],
             cal_data.GRIPB['cw']
         ]
-        self._servo_range = cal_data.RANGES
+        self._servo_range['gA'] = [cal_data.GRIPA['min'], cal_data.GRIPA['max']]
+        self._servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
+        self._servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
+        self._servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
@@ -116,6 +119,7 @@ class Bot(object):
         """
         Function to twist gripper, either twisting face or rotating cube
         gripper = 'A' or 'B'
+        dir = 'min' or 'max'
         dir = '+' 90-deg CW, '-' 90-deg CCW
         dir = 'ccw', 'center', 'cw' sets to that position
         returns
@@ -124,8 +128,14 @@ class Bot(object):
             SUCCESS [1, 'dir'] twisted face
         """
         other_gripper = 'B' if gripper == 'A' else 'A'
-
         new_state = None
+
+        if dir == 'min':
+            set_servo_angle(TWIST_CHANNEL[gripper], 0)
+            return [2, 'min']
+        if dir == 'max':
+            set_servo_angle(TWIST_CHANNEL[gripper], 180)
+            return [2, 'max']
         if dir == '-':
             if self._twist_state[gripper] == 0:
                 return [-1, 'Already at min ccw position.']

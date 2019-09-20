@@ -41,41 +41,38 @@ $( document ).ready( function() {
         });
     });
 
+    $( ".move-btn" ).click() {
+        var gripper = $( this ).attr( "data-grip" );
+        var setting = $( this ).attr( "data-value" );
+        $.post( "/move_gripper", {
+            gripper: gripper,
+            cmd: setting
+        }).done( function( response ) {
+            var msg;
+            if ( response.code < 0) {
+                msg = "Error: " + response.msg;
+            } else {
+                msg = "Success"
+            }
+            $( "#cal-results" ).text( msg );
+        });
+    }
+
     $( ".cal-btn" ).click( function() {
-        var id = $( this ).attr( "id" );
-        var ary = id.split( "-" );
-        var prop = ary[0];
-        var setting = ary[1];
-        var mod = ary[2];
-        if (mod == "move")
-        {
-            $.post( "/move_gripper", {
-                gripper: prop,
-                cmd: setting
-            }).done( function( response ) {
-                var msg;
-                if ( response.code < 0) {
-                    msg = "Error: " + response.msg;
-                } else {
-                    msg = "Success"
-                }
-                $( "#cal-results" ).text( msg );
-            });
-        }
-        else
-        {
-            $.post( "/set_cal_data", {
-                prop: prop,
-                setting: setting,
-                mod: mod
-            }).done( function( response ) {
-                var id = response.prop + "-" + response.setting + "-value";
-                console.log(id);
-                $( "#" + id ).addClass( 'text-warning' ).text( response.value );
-                $( "#cal-results" ).text( "Saved calibration setting." )
-            }).fail( function() {
-                $( "#cal-results" ).text( "Failed to set calibrate settings." )
-            });
-        }
+        var prop = $( this ).attr( "data-prop" );
+        var setting = $( this ).attr( "data-setting" );
+        var val = $( this ).attr( "data-value" );
+        $.post( "/set_cal_data", {
+            prop: prop,
+            setting: setting,
+            val: val
+        }).done( function( response ) {
+            var id = response.prop + "-" + response.setting + "-value";
+            console.log(id);
+            $( "#" + id ).addClass( 'text-warning' ).text( response.value );
+            $( "#cal-results" ).text( "Saved calibration setting." )
+        }).fail( function() {
+            $( "#cal-results" ).text( "Failed to set calibrate settings." )
+        });
     });
 });

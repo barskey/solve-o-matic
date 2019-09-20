@@ -67,27 +67,27 @@
 							<td colspan="8" class="p-0"><h4 class="text-warning m-2">Gripper A</h4></th>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-range-min">Min</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-min-dec"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-min-value">{{ cal_data['ranges'][0][0] }}</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-min-inc"><i class="fa fa-plus-square"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-max-dec"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-open-value">{{ cal_data['ranges'][0][1] }}</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripa-max-inc"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripa-range-max">Max</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-value="min">Min</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="min" data-value="-10"><i class="fa fa-minus-square"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-min-value">{{ cal_data.gripa.min }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="min" data-value="10"><i class="fa fa-plus-square"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="max" data-value="-10"><i class="fa fa-minus-square"></i></button></td>
+							<td class="align-middle p-0"><span id="gripa-max-value">{{ cal_data.gripa.max }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="max" data-value="10"><i class="fa fa-plus-square"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-value="max">Max</button></td>
 						</tr>
 						<tr>
 							<td colspan="8" class="p-0"><h4 class="text-warning m-2">Gripper B</h4></th>
 						</tr>
 						<tr>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-range-min">Min</button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-min-dec"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-min-value">{{ cal_data['ranges'][2][0] }}</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-min-inc"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-max-dec"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-open-value">{{ cal_data['ranges'][2][1] }}</span></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" id="gripb-max-inc"><i class="fa fa-caret-square-right"></i></button></td>
-							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block cal-btn" id="gripb-range-max">Max</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-value="min">Min</button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="min" data-value="-10"><i class="fa fa-minus-square"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-min-value">{{ cal_data.gripb.min }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="min" data-value="10"><i class="fa fa-plus-square"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="max" data-value="-10"><i class="fa fa-minus-square"></i></button></td>
+							<td class="align-middle p-0"><span id="gripb-max-value">{{ cal_data.gripb.max }}</span></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="max" data-value="10"><i class="fa fa-plus-square"></i></button></td>
+							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-value="max">Max</button></td>
 						</tr>
 						<tr>
 							<td colspan="8"  class="align-middle p-0"><em><span class="text-warning" id="cal-results"></span></em></td>
