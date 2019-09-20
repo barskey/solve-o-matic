@@ -30,7 +30,7 @@ $( document ).ready( function() {
         $.post( "/set_cal_data", {
             prop: prop,
             setting: setting,
-            mod: val
+            val: val
         }).done( function( response ) {
             get_sites();
             draw_sites();
