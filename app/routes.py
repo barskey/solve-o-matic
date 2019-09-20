@@ -51,6 +51,7 @@ def get_sites():
 def move_gripper():
 	gripper = request.form['gripper'][-1].upper() # last character to upper case e.g. 'A' from 'gripa'
 	cmd = request.form['cmd']
+	print(gripper, cmd)
 	result = None
 	if cmd in ['open', 'load', 'close']:
 		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'

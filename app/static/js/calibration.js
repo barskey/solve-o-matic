@@ -44,6 +44,7 @@ $( document ).ready( function() {
     $( ".move-btn" ).click( function() {
         var gripper = $( this ).attr( "data-grip" );
         var setting = $( this ).attr( "data-value" );
+        console.log(gripper, setting);
         $.post( "/move_gripper", {
             gripper: gripper,
             cmd: setting
@@ -68,7 +69,6 @@ $( document ).ready( function() {
             val: val
         }).done( function( response ) {
             var id = response.prop + "-" + response.setting + "-value";
-            console.log(id);
             $( "#" + id ).addClass( 'text-warning' ).text( response.value );
             $( "#cal-results" ).text( "Saved calibration setting." )
         }).fail( function() {
