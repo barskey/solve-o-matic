@@ -101,7 +101,6 @@ class Bot(object):
         self._servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
         self._servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
         self._servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
-        print(self._servo_range)
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])

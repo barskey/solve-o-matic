@@ -33,7 +33,7 @@ def set_calibrate():
 	prop = request.form['prop']
 	setting = request.form['setting']
 	value = request.form['val']
-
+	print(prop, setting, value)
 	new_value = cal.get_property(prop, setting) + int(value)
 
 	cal.set_property(prop, setting, new_value)
@@ -51,7 +51,7 @@ def get_sites():
 def move_gripper():
 	gripper = request.form['gripper'][-1].upper() # last character to upper case e.g. 'A' from 'gripa'
 	cmd = request.form['cmd']
-	print(gripper, cmd)
+
 	result = None
 	if cmd in ['open', 'load', 'close']:
 		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
