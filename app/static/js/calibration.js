@@ -44,7 +44,8 @@ $( document ).ready( function() {
     $( ".move-btn" ).click( function() {
         var gripper = $( this ).attr( "data-grip" );
         var setting = $( this ).attr( "data-val" );
-        console.log(gripper, setting);
+        console.log(gripper);
+        console.log(setting);
         $.post( "/move_gripper", {
             gripper: gripper,
             cmd: setting
