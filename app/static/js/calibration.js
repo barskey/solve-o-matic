@@ -24,15 +24,13 @@ $( document ).ready( function() {
     get_sites();
 
     $( ".set-btn" ).click( function() {
-        var id = $( this ).attr( "id" );
-        var ary = id.split( "-" );
-        var prop = ary[0];
-        var setting = ary[1];
-        var mod = ary[2];
+        var prop = $( this ).attr( "data-prop" );
+        var setting = $( this ).attr( "data-setting" );
+        var val = $( this ).attr( "data-val" );
         $.post( "/set_cal_data", {
             prop: prop,
             setting: setting,
-            mod: mod
+            mod: val
         }).done( function( response ) {
             get_sites();
             draw_sites();
