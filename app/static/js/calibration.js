@@ -56,7 +56,7 @@ $( document ).ready( function() {
             }
             $( "#cal-results" ).text( msg );
         });
-    }
+    });
 
     $( ".cal-btn" ).click( function() {
         var prop = $( this ).attr( "data-prop" );
