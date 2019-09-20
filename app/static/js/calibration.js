@@ -43,7 +43,7 @@ $( document ).ready( function() {
 
     $( ".move-btn" ).click( function() {
         var gripper = $( this ).attr( "data-grip" );
-        var setting = $( this ).attr( "data-value" );
+        var setting = $( this ).attr( "data-val" );
         console.log(gripper, setting);
         $.post( "/move_gripper", {
             gripper: gripper,
@@ -62,7 +62,7 @@ $( document ).ready( function() {
     $( ".cal-btn" ).click( function() {
         var prop = $( this ).attr( "data-prop" );
         var setting = $( this ).attr( "data-setting" );
-        var val = $( this ).attr( "data-value" );
+        var val = $( this ).attr( "data-val" );
         $.post( "/set_cal_data", {
             prop: prop,
             setting: setting,
