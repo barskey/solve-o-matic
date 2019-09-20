@@ -74,7 +74,7 @@ class Bot(object):
             print('{} grip{}: {}'.format(channel, g, self._servo_range['g' + g]))
         for g,channel in TWIST_CHANNEL.items():
             kit.servo[channel].set_pulse_width_range(*self._servo_range['t' + g])
-            print('{} grip{}: {}'.format(channel, g, self._servo_range['t' + g]))
+            print('{} twist{}: {}'.format(channel, g, self._servo_range['t' + g]))
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
