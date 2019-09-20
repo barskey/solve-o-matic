@@ -41,7 +41,7 @@ $( document ).ready( function() {
         });
     });
 
-    $( ".move-btn" ).click() {
+    $( ".move-btn" ).click( function() {
         var gripper = $( this ).attr( "data-grip" );
         var setting = $( this ).attr( "data-value" );
         $.post( "/move_gripper", {
