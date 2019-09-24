@@ -52,7 +52,7 @@ class Bot(object):
         'A': [0, 0, 0],
         'B': [0, 0, 0]
     }
-    _servo_range = {
+    servo_range = {
         'gA': [520, 2450],
         'gB': [750, 2250],
         'tA': [750, 2250],
@@ -68,13 +68,13 @@ class Bot(object):
         self.camera.iso = 400
     
     def init_servos(self):
-        # initialize servo pulse ranges
+        """ initialize servo pulse ranges """
         for g,channel in GRIP_CHANNEL.items():
-            kit.servo[channel].set_pulse_width_range(*self._servo_range['g' + g])
-            #print('{} grip{}: {}'.format(channel, g, self._servo_range['g' + g]))
+            kit.servo[channel].set_pulse_width_range(*self.servo_range['g' + g])
+            #print('{} grip{}: {}'.format(channel, g, self.servo_range['g' + g]))
         for g,channel in TWIST_CHANNEL.items():
-            kit.servo[channel].set_pulse_width_range(*self._servo_range['t' + g])
-            #print('{} twist{}: {}'.format(channel, g, self._servo_range['t' + g]))
+            kit.servo[channel].set_pulse_width_range(*self.servo_range['t' + g])
+            #print('{} twist{}: {}'.format(channel, g, self.servo_range['t' + g]))
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
@@ -97,14 +97,15 @@ class Bot(object):
             cal_data.GRIPB['center'],
             cal_data.GRIPB['cw']
         ]
-        self._servo_range['gA'] = [cal_data.GRIPA['min'], cal_data.GRIPA['max']]
-        self._servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
-        self._servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
-        self._servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
+        self.servo_range['gA'] = [cal_data.GRIPA['min'], cal_data.GRIPA['max']]
+        self.servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
+        self.servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
+        self.servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
         #    self.twist(g, tpk[self._twist_state[g]])
+        self.color_limit = cal_data.COLOR_LIMITS
 
     def grip(self, gripper, cmd):
         """
@@ -213,72 +214,46 @@ class Bot(object):
         # loop through each site and store its raw color
         sitenum = 0
         face_colors = [None for i in range(9)]
-        unsure_sites = []
         for row in range(0, 3):
             for col in range(0, 3):
+                print('r{}c{}'.format(row, col))
                 left = sites['tlx'] + (col * sites['pitch'])
                 upper = sites['tly'] + (row * sites['pitch'])
                 box = (left, upper, left + sites['size'], upper + sites['size'])
                 site = face_img.crop(box) # crop the img so only the site is left
-                #site.save('r{}c{}.jpg'.format(row, col))
-                #site.show() # debug
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
                 #print(c.rgb)
-                #print(c.hsv)
-                h,s,v = c.hsv
-                site_color = None
-                if s <= 0.2:
-                    site_color = Color('white')
-                    #print('r{}c{}: white'.format(row, col))
-                elif 0.01 <= h < 0.1:
-                    site_color = Color('orange')
-                    #print('r{}c{}: orange'.format(row, col))
-                elif 0.1 <= h < 0.2:
-                    site_color = Color('yellow')
-                    #print('r{}c{}: yellow'.format(row, col))
-                elif 0.2 <= h <= 0.4:
-                    site_color = Color('green')
-                    #print('r{}c{} green'.format(row,col))
-                elif 0.5 <= h < 0.7:
-                    site_color = Color('blue')
-                    #print('r{}c{} blue'.format(row,col))
-                else:
-                    site_color = Color('red')
-                    #print('r{}c{}: red'.format(row, col))
-
-                #match_color, delta_e = find_closest_color(mean_color, self._colors)
-                #print (match_color, delta_e) # debug
-                #if delta_e > THRESHOLD:
-                #    if len(self._colors) < 6: # store this color since list is not populated yet
-                #        self._colors.append(mean_color)
-                #        self._cube.set_raw_color(self._cube.get_up_face(), sitenum, mean_color)
-                #    else:
-                #        unsure_sites.append(sitenum)
-                #else:
-                #    self._cube.set_raw_color(self._cube.get_up_face(), sitenum, match_color)
-                
-                #hex_color = '#' + format(int(mean_color[0]), 'x') + format(int(mean_color[1]), 'x') + format(int(mean_color[2]), 'x')
+                site_color = self.get_color(c)
+                print('Color identified:{}'.format(str(site_color)))
                 face_colors[sitenum] = str(site_color) # return the hex color
                 sitenum = sitenum + 1
         #print(self._colors)
-        return {'colors': face_colors, 'unsure': unsure_sites, 'upface': self._cube.get_up_face()}
+        return {'colors': face_colors, 'upface': self._cube.get_up_face()}
+    
+    def get_color(self, c):
+        """ Decide the color by its h value (non-white) or by s and v (white) """
+        h,s,v = c.hsv
+        print('H:{} S:{} V:{}'.format(h, s, v))
+        if s <= self.color_limit['sat_W'] and v >= self.color_limit['val_W']:
+            return Color('white')
+        elif self.color_limit['orange_L'] <= h < self.color_limit['orange_H']:
+            return Color('orange')
+        elif self.color_limit['orange_H'] <= h < self.color_limit['yellow_H']:
+            return Color('yellow')
+        elif self.color_limit['yellow_H'] <= h <= self.color_limit['green_H']:
+            if s < 0.5:
+                return Color('white') # green saturation is always higher
+            else:
+                return Color('green')
+        elif self.color_limit['green_H'] <= h < self.color_limit['blue_H']:
+            if s < 0.5:
+                return Color('white') # blue saturation is always higher
+            else:
+                return Color('blue')
+        else:
+            return Color('red')
 
-
-def find_closest_color(color, colors_to_check):
-	# create Color object from site color and convert to lab color for comparison
-	r, g, b = (x / 255.0 for x in color)
-	site_color_lab = convert_color(sRGBColor(r, g, b), LabColor)
-	last_delta_e = 999
-	match_color = None
-	for c in colors_to_check:
-		r, g, b = (x / 255.0 for x in c)
-		check_color_lab = convert_color(sRGBColor(r, g, b), LabColor) # convert to lab color for comparison
-		delta_e = delta_e_cie2000(site_color_lab, check_color_lab)
-		if delta_e < last_delta_e: # use this check to find the closest match
-			match_color = c
-			last_delta_e = delta_e
-	return match_color, last_delta_e
 
 def set_servo_angle(s, a):
     print(s,a)

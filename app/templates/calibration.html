@@ -12,10 +12,13 @@
 					<a class="nav-link active" id="sites-tab" data-toggle="tab" href="#sites">Sites</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="ranges-tab" data-toggle="tab" href="#ranges">Ranges</a>
+					<a class="nav-link" id="ranges-tab" data-toggle="tab" href="#ranges">Limits</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="calibrate-tab" data-toggle="tab" href="#calibrate">Calibrate</a>
+					<a class="nav-link" id="calibrate-tab" data-toggle="tab" href="#calibrate">Pos</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="colors-tab" data-toggle="tab" href="#colors">Colors</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" id="save-tab" data-toggle="tab" href="#save">Done</a>
@@ -55,7 +58,7 @@
 							</table>
 						</div>
 						<div class="col-1"></div>
-						<div class="col" id="screenshot">
+						<div class="col" id="sites-screenshot">
 							<img src="data:image/jpeg;base64,{{ img }}" width="160" height="160">
 							<canvas width="160" height="160" class="position-absolute" id="sites-canvas"></canvas>
 						</div>
@@ -69,10 +72,10 @@
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twista" data-val="min">Min</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="min" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twista-min-value">{{ cal_data.twista.min }}</span></td>
+							<td class="align-middle p-0"><span id="twista-min-value">{{ servo_range.tA[0] }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="min" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="max" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twista-max-value">{{ cal_data.twista.max }}</span></td>
+							<td class="align-middle p-0"><span id="twista-max-value">{{ servo_range.tA[1] }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="max" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twista" data-val="max">Max</button></td>
 						</tr>
@@ -82,10 +85,10 @@
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twistb" data-val="min">Min</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="min" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twistb-min-value">{{ cal_data.twistb.min }}</span></td>
+							<td class="align-middle p-0"><span id="twistb-min-value">{{ servo_range.tB[0] }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="min" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="max" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twistb-max-value">{{ cal_data.twistb.max }}</span></td>
+							<td class="align-middle p-0"><span id="twistb-max-value">{{ servo_range.tB{1]} }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="max" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twistb" data-val="max">Max</button></td>
 						</tr>
@@ -93,6 +96,31 @@
 							<td colspan="8"  class="align-middle p-0"><em><span class="text-warning" id="cal-results"></span></em></td>
 						</tr>
 					</table>
+				</div>
+				<div class="container-fluid tab-pane" id="colors">
+					<div class="row h-75 align-items-center">
+						<div class="col-5">
+							<label for="sat_W">White Sat</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.47 }}" max="{{ 0 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
+							<label for="val_W">White Val</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.31 }}" max="{{ 1 }}" step="0.01" id="val_W" value="{{ color_limit.val_W }}">
+							<label for="orange_L">Red-Orange</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.005 }}" max="{{ 0.055 }}" step="0.005" id="orange_L" value="{{ color_limit.orange_L }}">
+							<label for="orange_H">Orange-Yellow</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.03 }}" max="{{ 0.16 }}" step="0.01" id="orange_H" value="{{ color_limit.orange_H }}">
+							<label for="yellow_H">Yellow-Green</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.12 }}" max="{{ 0.32 }}" step="0.01" id="yellow_H" value="{{ color_limit.yellow_H }}">
+							<label for="green_H">Green-Blue</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.25 }}" max="{{ 0.5 }}" step="0.01" id="green_H" value="{{ color_limit.green_H }}">
+							<label for="blue_H">Blue-Red</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.45 }}" max="{{ 0.71 }}" step="0.01" id="blue_H" value="{{ color_limit.blue_H }}">
+						</div>
+						<div class="col-1"></div>
+						<div class="col" id="color-screenshot">
+							<img src="data:image/jpeg;base64,{{ img }}" width="160" height="160">
+							<canvas width="160" height="160" class="position-absolute" id="colors-canvas"></canvas>
+						</div>
+					</div>
 				</div>
 				<div class="container-fluid tab-pane" id="calibrate">
 					<table class="table table-sm table-borderless text-center text-light">

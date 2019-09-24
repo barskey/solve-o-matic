@@ -3,52 +3,14 @@ import json
 class Calibration(object):
     def __init__(self):
         caldata = json.load(open('app/calibrate.json'))
-        self.CROP = {
-            'tl': caldata['crop']['tl'],
-            'size': caldata['crop']['size']
-        }
-        self.SITES = {
-            'tlx': caldata['sites']['tlx'],
-            'tly': caldata['sites']['tly'],
-            'size': caldata['sites']['size'],
-            'pitch': caldata['sites']['pitch']
-        }
-        self.GRIPA = {
-            'open': caldata['gripa']['open'],
-            'close': caldata['gripa']['close'],
-            'load': caldata['gripa']['load'],
-            'ccw': caldata['gripa']['ccw'],
-            'cw': caldata['gripa']['cw'],
-            'center': caldata['gripa']['center'],
-            'min': caldata['gripa']['min'],
-            'max': caldata['gripa']['max']
-        }
-        self.GRIPB = {
-            'open': caldata['gripb']['open'],
-            'close': caldata['gripb']['close'],
-            'load': caldata['gripb']['load'],
-            'ccw': caldata['gripb']['ccw'],
-            'cw': caldata['gripb']['cw'],
-            'center': caldata['gripb']['center'],
-            'min': caldata['gripb']['min'],
-            'max': caldata['gripb']['max']
-        }
-        self.TWISTA = {
-            'min': caldata['twista']['min'],
-            'max': caldata['twista']['max']
-        }
-        self.TWISTB = {
-            'min': caldata['twistb']['min'],
-            'max': caldata['twistb']['max']
-        }
-        self.COLORS = {
-            'red': caldata['colors']['red'],
-            'orange': caldata['colors']['orange'],
-            'yellow': caldata['colors']['yellow'],
-            'green': caldata['colors']['green'],
-            'blue': caldata['colors']['blue'],
-            'white': caldata['colors']['white'],
-        }
+        self.CROP = caldata['crop']
+        self.SITES = caldata['sites']
+        self.GRIPA = caldata['gripa']
+        self.GRIPB = caldata['gripb']
+        self.TWISTA = caldata['twista']
+        self.TWISTB = caldata['twistb']
+        self.COLORS = caldata['colors']
+        self.COLOR_LIMITS = caldata['color_limits']
 
     def get_property(self, prop, param):
         value = None
@@ -66,6 +28,8 @@ class Calibration(object):
             value = self.TWISTB[param]
         elif prop == "colors":
             value = self.COLORS[param]
+        elif prop == "color_limits":
+            value = self.COLOR_LIMITS[param]
         return value
 
     def set_property(self, prop, param, value):
@@ -83,6 +47,8 @@ class Calibration(object):
             self.TWISTB[param] = value
         elif prop == "colors":
             self.COLORS[param] = value
+        elif prop == "color_limits":
+            self.COLOR_LIMITS[param] = value
         self.write_to_file()
 
     def write_to_file(self):
@@ -93,7 +59,8 @@ class Calibration(object):
             'gripb': self.GRIPB,
             'twista': self.TWISTA,
             'twistb': self.TWISTB,
-            'colors': self.COLORS
+            'colors': self.COLORS,
+            'color_limits': self.COLOR_LIMITS
         }
         with open('app/calibrate.json', 'w') as outfile:
             json.dump(data, outfile)

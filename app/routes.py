@@ -22,11 +22,10 @@ def scan():
 
 @app.route('/calibration')
 def settings():
-	cal_data = json.load(open('app/calibrate.json'))
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
-	return render_template('calibration.html', title='Calibration', cal_data=cal_data, img=img)
+	return render_template('calibration.html', title='Calibration', servo_range=mybot.servo_range, color_limit=mybot.color_limit, img=img)
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
