@@ -19,7 +19,7 @@ canvas {
     z-index: 10;
 }
 
-#sites-canvas {
+#sites-canvas,#colors-canvas {
     left: 15px;
     top: 0;
 }
