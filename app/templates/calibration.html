@@ -100,8 +100,6 @@
 				<div class="container-fluid tab-pane" id="colors">
 					<div class="row h-75 align-items-center">
 						<div class="col-5">
-							Ws<input type="range" class="custom-range color-slider" min="{{ 0.47 }}" max="{{ 0 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
-							Wv<input type="range" class="custom-range color-slider" min="{{ 0.31 }}" max="{{ 1 }}" step="0.01" id="val_W" value="{{ color_limit.val_W }}">
 							<label for="orange_L">Red-Orange</label>
 							<input type="range" class="custom-range color-slider" min="{{ 0.005 }}" max="{{ 0.055 }}" step="0.005" id="orange_L" value="{{ color_limit.orange_L }}">
 							<label for="orange_H">Orange-Yellow</label>
@@ -115,8 +113,12 @@
 						</div>
 						<div class="col-1"></div>
 						<div class="col" id="color-screenshot">
+							<label for="sat_W">White Sat</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.47 }}" max="{{ 0 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
 							<img src="data:image/jpeg;base64,{{ img }}" width="160" height="160">
 							<canvas width="160" height="160" class="position-absolute" id="colors-canvas"></canvas>
+							<label for="val_W">White Val</label>
+							<input type="range" class="custom-range color-slider" min="{{ 0.31 }}" max="{{ 1 }}" step="0.01" id="val_W" value="{{ color_limit.val_W }}">
 						</div>
 					</div>
 				</div>
