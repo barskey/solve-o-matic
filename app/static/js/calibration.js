@@ -5,12 +5,12 @@ $( document ).ready( function() {
         $.post( "/get_sites" )
         .done( function( response ) {
             sites = response.sites;
-            draw_sites();
         });
     }
 
-    var canvas = $( "#sites-canvas" )[0]
-    var sc = canvas.getContext( "2d" );
+    var sc = $( "#sites-canvas" )[0].getContext( "2d" );
+    var cc = $( "#colors-canvas" )[0].getContext( "2d" );
+
     function draw_sites() {
         sc.clearRect(0, 0, canvas.width, canvas.height);
         sc.strokeStyle = "#FFFFFF"
@@ -21,7 +21,24 @@ $( document ).ready( function() {
         }
     }
 
+    function draw_colors( siteColors ) {
+        var i = 0;
+        for ( var r = 0; r < 3; r++ ) {
+            for ( var c = 0; c < 3; c++) {
+                var x = sites.tlx + (sites.pitch * c);
+                var y = sites.tly + (sites.pitch * r);
+                console.log(x,y);
+                cc.fillStyle = siteColors[i];
+                cc.fillRect( x, y, sites.size, sites.size );
+                cc.strokeStyle = "#FFFFFF";
+                cc.strokeRect( x, y, sites.size, sites.size );
+                i++;
+            }
+        }
+    }
+
     get_sites();
+    draw_sites();
 
     $( ".set-btn" ).click( function() {
         var prop = $( this ).attr( "data-prop" );

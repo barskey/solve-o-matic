@@ -28,7 +28,7 @@
 		<div class="card-body p-1">
 			<div class="tab-content">
 				<div class="container-fluid tab-pane show active" id="sites">
-					<div class="row h-75 align-items-center">
+					<div class="row align-items-center">
 						<div class="col-5">
 							<table class="table table-sm table-borderless">
 								<tr>
@@ -98,13 +98,13 @@
 					</table>
 				</div>
 				<div class="container-fluid tab-pane" id="colors">
-					<div class="row h-75 align-items-center">
-						<div class="col-5">
+					<div class="row align-items-center">
+						<div class="col-5 my-4">
 							<table class="table table-sm table-borderless">
 								<tr>
 									<td>Wsat</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.47 }}" max="{{ 0 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0 }}" max="{{ 0.47 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
 									</td>
 								</tr>
 								<tr>
