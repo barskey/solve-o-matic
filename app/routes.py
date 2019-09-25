@@ -25,7 +25,7 @@ def settings():
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
-	return render_template('calibration.html', title='Calibration', servo_range=mybot.servo_range, color_limit=mybot.color_limit, img=img)
+	return render_template('calibration.html', title='Calibration', servo_range=mybot.servo_range, color_limit=cal.COLOR_LIMITS, gripa=cal.GRIPA, gripb=cal.GRIPB, img=img) # TODO should I get servo_range from mybot?
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
