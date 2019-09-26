@@ -18,6 +18,12 @@ def index():
 def scan():
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
+	mybot.grip('A', 'o')
+	mybot.grip('B', 'o')
+	mybot.twist('A', 'center')
+	mybot.twist('B', 'center')
+	mybot.grip('A', 'l')
+	mybot.grip('B', 'l')
 	return render_template('scan.html', title='Scan', img=img)
 
 @app.route('/calibration')
@@ -25,7 +31,7 @@ def settings():
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
-	return render_template('calibration.html', title='Calibration', servo_range=mybot.servo_range, color_limit=cal.COLOR_LIMITS, gripa=cal.GRIPA, gripb=cal.GRIPB, img=img) # TODO should I get servo_range from mybot?
+	return render_template('calibration.html', title='Calibration', cal=cal, img=img) # TODO should I get servo_range from mybot?
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
@@ -42,9 +48,24 @@ def set_calibrate():
 	
 	return jsonify({'prop': prop, 'setting': setting, 'value': new_value})
 
+@app.route('/set_color_slider', methods=['POST'])
+def set_color_slider():
+	setting = request.form['setting']
+	value = request.form['val']
+	print('color_slider', setting, value)
+
+	cal.set_property('color_limits', setting, float(value))
+	mybot.update_cal(cal)
+	
+	return jsonify(mybot.process_face())
+
 @app.route('/get_sites', methods=['POST'])
 def get_sites():
-	return jsonify({'sites': cal.SITES})
+	return jsonify({'sites': cal.sites})
+
+@app.route('/get_face_colors', methods=['POST'])
+def get_face_colors():
+	return jsonify(mybot.process_face())
 
 @app.route('/move_gripper', methods=['POST'])
 def move_gripper():
@@ -64,10 +85,9 @@ def move_gripper():
 @app.route('/scan_next', methods=['POST'])
 def scan_next():
 	if request.form['start'] == 'true':
-		result = mybot.scan_cube()
+		result = mybot.start_scan()
 		return jsonify({'msg': result[1], 'result': result[0]})
 	else:
 		result = mybot.scan_move()
 		if result[0] == 0:
-			r = mybot.process_face(cal.SITES)
-			return jsonify(r)
+			return jsonify(mybot.process_face())

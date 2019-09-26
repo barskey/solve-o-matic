@@ -6,11 +6,6 @@ from picamera import PiCamera, Color
 import base64
 from io import BytesIO
 from PIL import Image, ImageStat
-import numpy as np
-import colorsys
-from colormath.color_objects import sRGBColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie2000
 
 # for convenience in referening array index
 tp = {'ccw': 0, 'center': 1, 'cw': 2}
@@ -78,34 +73,35 @@ class Bot(object):
 
     def update_cal(self, cal_data):
         self._grip_pos['A'] = {
-            'o': cal_data.GRIPA['open'],
-            'c': cal_data.GRIPA['close'],
-            'l': cal_data.GRIPA['load']
+            'o': cal_data.gripa['open'],
+            'c': cal_data.gripa['close'],
+            'l': cal_data.gripa['load']
         }
         self._grip_pos['B'] = {
-            'o': cal_data.GRIPB['open'],
-            'c': cal_data.GRIPB['close'],
-            'l': cal_data.GRIPB['load']
+            'o': cal_data.gripb['open'],
+            'c': cal_data.gripb['close'],
+            'l': cal_data.gripb['load']
         }
         self._twist_pos['A'] = [
-            cal_data.GRIPA['ccw'],
-            cal_data.GRIPA['center'],
-            cal_data.GRIPA['cw']
+            cal_data.gripa['ccw'],
+            cal_data.gripa['center'],
+            cal_data.gripa['cw']
         ]
         self._twist_pos['B'] = [
-            cal_data.GRIPB['ccw'],
-            cal_data.GRIPB['center'],
-            cal_data.GRIPB['cw']
+            cal_data.gripb['ccw'],
+            cal_data.gripb['center'],
+            cal_data.gripb['cw']
         ]
-        self.servo_range['gA'] = [cal_data.GRIPA['min'], cal_data.GRIPA['max']]
-        self.servo_range['gB'] = [cal_data.GRIPB['min'], cal_data.GRIPB['max']]
+        self.servo_range['gA'] = [cal_data.gripa['min'], cal_data.gripa['max']]
+        self.servo_range['gB'] = [cal_data.gripb['min'], cal_data.gripb['max']]
         self.servo_range['tA'] = [cal_data.TWISTA['min'], cal_data.TWISTA['max']]
         self.servo_range['tB'] = [cal_data.TWISTB['min'], cal_data.TWISTB['max']]
         # move/rotate grippers to current/new positions
         #for g in ['A', 'B']:
         #    self.grip(g, self._grip_state[g])
         #    self.twist(g, tpk[self._twist_state[g]])
-        self.color_limit = cal_data.COLOR_LIMITS
+        self.color_limits = cal_data.color_limits
+        self.sites = cal_data.sites
 
     def grip(self, gripper, cmd):
         """
@@ -127,8 +123,8 @@ class Bot(object):
         dir = 'ccw', 'center', 'cw' sets to that position
         returns
             ERROR [-1, 'error msg'] no move or twist
-            SUCCESS [0, 'dir'] twisted cube
-            SUCCESS [1, 'dir'] twisted face
+            SUCCESS [0, dir] turned cube
+            SUCCESS [1, dir] twisted face
         """
         other_gripper = 'B' if gripper == 'A' else 'A'
         new_state = None
@@ -162,10 +158,11 @@ class Bot(object):
 
         set_servo_angle(TWIST_CHANNEL[gripper], self._twist_pos[gripper][new_state])
         time.sleep(SLEEP_TIME)
+        
         self._twist_state[gripper] = new_state
         return [0 if self._grip_state[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
 
-    def scan_cube(self):
+    def start_scan(self):
         self._scan_index = 0
         self._cube.orientation = 'UFD'
         self.grip('B','c')
@@ -195,7 +192,8 @@ class Bot(object):
         #camera.stop_preview()
 
     def get_imagestream(self):
-        stream = BytesIO()
+        """ Captures to BytesIO (python in-memory stream class) """
+        stream = BytesIO() # create the in-memory stream
         #camera.start_preview(fullscreen=False, window=(255,98,160,160))
         self.camera.capture(stream, 'jpeg')
         #camera.stop_preview()
@@ -203,23 +201,22 @@ class Bot(object):
         stream.seek(0)
         return stream
 
-    def process_face(self, sites):
+    def process_face(self):
         """
-        Gets image from camera, crops and gets average (mean) colors
-        in each region, and stores in _raw_colors.
-        Returns list of colors on this face for uix
+        Gets image from camera, crops and gets average (mean) colors in each region.
+        Returns list of colors on this face and face name for uix
         """
-        face_img = Image.open(self.get_imagestream())
+        face_img = Image.open(self.get_imagestream()) # open in-memory stream as PIL image
 
         # loop through each site and store its raw color
         sitenum = 0
         face_colors = [None for i in range(9)]
-        for row in range(0, 3):
-            for col in range(0, 3):
+        for row in range(3):
+            for col in range(3):
                 print('r{}c{}'.format(row, col))
-                left = sites['tlx'] + (col * sites['pitch'])
-                upper = sites['tly'] + (row * sites['pitch'])
-                box = (left, upper, left + sites['size'], upper + sites['size'])
+                left = self.sites['tlx'] + (col * self.sites['pitch'])
+                upper = self.sites['tly'] + (row * self.sites['pitch'])
+                box = (left, upper, left + self.sites['size'], upper + self.sites['size'])
                 site = face_img.crop(box) # crop the img so only the site is left
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
@@ -235,18 +232,18 @@ class Bot(object):
         """ Decide the color by its h value (non-white) or by s and v (white) """
         h,s,v = c.hsv
         print('H:{} S:{} V:{}'.format(h, s, v))
-        if s <= self.color_limit['sat_W'] and v >= self.color_limit['val_W']:
+        if s <= self.color_limits['sat_W'] and v >= self.color_limits['val_W']:
             return Color('white')
-        elif self.color_limit['orange_L'] <= h < self.color_limit['orange_H']:
+        elif self.color_limits['orange_L'] <= h < self.color_limits['orange_H']:
             return Color('orange')
-        elif self.color_limit['orange_H'] <= h < self.color_limit['yellow_H']:
+        elif self.color_limits['orange_H'] <= h < self.color_limits['yellow_H']:
             return Color('yellow')
-        elif self.color_limit['yellow_H'] <= h <= self.color_limit['green_H']:
+        elif self.color_limits['yellow_H'] <= h <= self.color_limits['green_H']:
             if s < 0.5:
                 return Color('white') # green saturation is always higher
             else:
                 return Color('green')
-        elif self.color_limit['green_H'] <= h < self.color_limit['blue_H']:
+        elif self.color_limits['green_H'] <= h < self.color_limits['blue_H']:
             if s < 0.5:
                 return Color('white') # blue saturation is always higher
             else:

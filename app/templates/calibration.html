@@ -72,10 +72,10 @@
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twista" data-val="min">Min</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="min" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twista-min-value">{{ servo_range.tA[0] }}</span></td>
+							<td class="align-middle p-0"><span id="twista-min-value">{{ cal.twista.min }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="min" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="max" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twista-max-value">{{ servo_range.tA[1] }}</span></td>
+							<td class="align-middle p-0"><span id="twista-max-value">{{ cal.twista.max }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twista" data-setting="max" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twista" data-val="max">Max</button></td>
 						</tr>
@@ -85,10 +85,10 @@
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twistb" data-val="min">Min</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="min" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twistb-min-value">{{ servo_range.tB[0] }}</span></td>
+							<td class="align-middle p-0"><span id="twistb-min-value">{{ cal.twistb.min }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="min" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="max" data-val="-10"><i class="fa fa-minus-square"></i></button></td>
-							<td class="align-middle p-0"><span id="twistb-max-value">{{ servo_range.tB[1] }}</span></td>
+							<td class="align-middle p-0"><span id="twistb-max-value">{{ cal.twistb.max }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="twistb" data-setting="max" data-val="10"><i class="fa fa-plus-square"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="twistb" data-val="max">Max</button></td>
 						</tr>
@@ -101,46 +101,46 @@
 					<div class="row align-items-center">
 						<div class="col-5 my-4">
 							<table class="table table-sm table-borderless">
-								<tr>
+								<tr class="my-1">
 									<td>Wsat</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0 }}" max="{{ 0.47 }}" step="0.01" id="sat_W" value="{{ color_limit.sat_W }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0 }}" max="{{ 0.47 }}" step="0.01" id="sat_W" value="{{ cal.color_limits.sat_W }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>Wv</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.31 }}" max="{{ 1 }}" step="0.01" id="val_W" value="{{ color_limit.val_W }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.31 }}" max="{{ 1 }}" step="0.01" id="val_W" value="{{ cal.color_limits.val_W }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>R-O</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.005 }}" max="{{ 0.055 }}" step="0.005" id="orange_L" value="{{ color_limit.orange_L }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.005 }}" max="{{ 0.055 }}" step="0.005" id="orange_L" value="{{ cal.color_limits.orange_L }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>O-Y</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.03 }}" max="{{ 0.16 }}" step="0.01" id="orange_H" value="{{ color_limit.orange_H }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.03 }}" max="{{ 0.16 }}" step="0.01" id="orange_H" value="{{ cal.color_limits.orange_H }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>Y-G</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.12 }}" max="{{ 0.32 }}" step="0.01" id="yellow_H" value="{{ color_limit.yellow_H }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.12 }}" max="{{ 0.32 }}" step="0.01" id="yellow_H" value="{{ cal.color_limits.yellow_H }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>G-B</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.25 }}" max="{{ 0.5 }}" step="0.01" id="green_H" value="{{ color_limit.green_H }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.25 }}" max="{{ 0.5 }}" step="0.01" id="green_H" value="{{ cal.color_limits.green_H }}">
 									</td>
 								</tr>
-								<tr>
+								<tr class="my-1">
 									<td>B-R</td>
 									<td>
-										<input type="range" class="custom-range color-slider" min="{{ 0.45 }}" max="{{ 0.71 }}" step="0.01" id="blue_H" value="{{ color_limit.blue_H }}">
+										<input type="range" class="custom-range color-slider" min="{{ 0.45 }}" max="{{ 0.71 }}" step="0.01" id="blue_H" value="{{ cal.color_limits.blue_H }}">
 									</td>
 								</tr>
 							</table>
@@ -161,60 +161,60 @@
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="open">Open</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="open" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-open-value">{{ gripa.open }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-open-value">{{ cal.gripa.open }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="open" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="open" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-open-value">{{ gripb.open }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-open-value">{{ cal.gripb.open }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="open" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="open">Open</button></td>
 						</tr>
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="load">Load</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="load" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-load-value">{{ gripa.load }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-load-value">{{ cal.gripa.load }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="load" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="load" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-load-value">{{ gripb.load }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-load-value">{{ cal.gripb.load }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="load" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="load">Load</button></td>
 						</tr>
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="close">Close</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="close" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-close-value">{{ gripa.close }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-close-value">{{ cal.gripa.close }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="close" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="close" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-close-value">{{ gripb.close }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-close-value">{{ cal.gripb.close }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="close" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="close">Close</button></td>
 						</tr>
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="ccw">CCW</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="ccw" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-ccw-value">{{ gripa.ccw }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-ccw-value">{{ cal.gripa.ccw }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="ccw" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="ccw" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-ccw-value">{{ gripb.ccw }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-ccw-value">{{ cal.gripb.ccw }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="ccw" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="ccw">CCW</i></button></td>
 						</tr>
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="center">Center</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="center" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-center-value">{{ gripa.center }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-center-value">{{ cal.gripa.center }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="center" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="center" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-center-value">{{ gripb.center }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-center-value">{{ cal.gripb.center }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="center" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="center">Center</button></td>
 						</tr>
 						<tr>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripa" data-val="cw">CW</button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="cw" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripa-cw-value">{{ gripa.cw }}</span></td>
+							<td class="align-middle p-0"><span id="gripa-cw-value">{{ cal.gripa.cw }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripa" data-setting="cw" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="cw" data-val="-1"><i class="fa fa-caret-square-left"></i></button></td>
-							<td class="align-middle p-0"><span id="gripb-cw-value">{{ gripb.cw }}</span></td>
+							<td class="align-middle p-0"><span id="gripb-cw-value">{{ cal.gripb.cw }}</span></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-outline-info cal-btn" data-prop="gripb" data-setting="cw" data-val="1"><i class="fa fa-caret-square-right"></i></button></td>
 							<td class="align-middle p-0"><button type="button" class="btn btn-sm btn-info btn-block move-btn" data-prop="gripb" data-val="cw">CW</i></button></td>
 						</tr>

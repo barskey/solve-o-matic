@@ -13,7 +13,6 @@ $( document ).ready( function() {
         $.post( "/get_sites" )
         .done( function( response ) {
             sites = response.sites;
-            //draw_sites();
         });
     }
 
@@ -23,7 +22,7 @@ $( document ).ready( function() {
     var cc = $( "#cube-flat" )[0].getContext( "2d" );
     var blank = "#000000";
     for (var face in face_tl) {
-        drawFace(face, [blank, blank, blank, blank, blank, blank, blank, blank, blank]);
+        drawFace( face, [blank, blank, blank, blank, blank, blank, blank, blank, blank] );
     }
 
     function drawFace( face, siteColors ) {
@@ -46,21 +45,16 @@ $( document ).ready( function() {
     // canvas for drawing cube site boxes over camera view
     var camc = $( "#cam-view" )[0].getContext( "2d" );
 
-    function drawCamView( siteColors, unsureColors ) {
+    function drawCamView( siteColors ) {
         var i = 0;
         for ( var r = 0; r < 3; r++ ) {
             for ( var c = 0; c < 3; c++) {
                 var x = sites.tlx + (sites.pitch * c);
                 var y = sites.tly + (sites.pitch * r);
-                console.log(x,y);
+                //console.log(x,y);
                 camc.fillStyle = siteColors[i];
                 camc.fillRect( x, y, sites.size, sites.size );
                 camc.strokeStyle = "#707070";
-                unsureColors.forEach(site => {
-                    if (i == site) {
-                        camc.strokeStyle = "#00FF00";
-                    }
-                });
                 camc.strokeRect( x, y, sites.size, sites.size );
                 i++;
             }
@@ -68,13 +62,13 @@ $( document ).ready( function() {
     }
 
     $( "#scan-next" ).click( function() {
-        if ($( this ).text() == "Start") {
+        if ( $( this ).text() == "Start" ) {
             $( this ).attr( { "disabled": true } );
             $( "#scan-status" ).text( "Gripping..." );
             $.post( "/scan_next", { start: "true" })
             .done( function ( response ) {
                 $( "#scan-next" ).removeAttr( "disabled" ).text( "Next..." );
-                $( "#scan-status" ).html( "Does everything look OK?<br />Adjust position if necessary." );
+                $( "#scan-status" ).html( "Give me your cube and I'll do the rest..." );
             });
         } else {
             $( this ).attr( { "disabled": true } );
@@ -83,11 +77,8 @@ $( document ).ready( function() {
             .done( function( response ) {
                 drawFace( response.upface, response.colors );
                 //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
-                drawCamView( response.colors, response.unsure );
-                if ( response.unsure.length > 0 ) {
-                    console.warn("Unsure Sites!");
-                }
-                console.log(response);
+                drawCamView( response.colors );
+                console.log( response );
             });
         }
     });

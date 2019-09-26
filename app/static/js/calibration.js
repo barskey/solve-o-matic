@@ -5,6 +5,7 @@ $( document ).ready( function() {
         $.post( "/get_sites" )
         .done( function( response ) {
             sites = response.sites;
+            draw_sites();
         });
     }
 
@@ -38,7 +39,6 @@ $( document ).ready( function() {
     }
 
     get_sites();
-    draw_sites();
 
     $( ".set-btn" ).click( function() {
         var prop = $( this ).attr( "data-prop" );
@@ -49,10 +49,9 @@ $( document ).ready( function() {
             setting: setting,
             val: val
         }).done( function( response ) {
-            get_sites();
             draw_sites();
         }).fail( function() {
-            $( "#cal-results" ).text( "Failed to set calibrate settings." )
+            console.log( "Failed to set calibrate settings." );
         });
     });
 
@@ -67,7 +66,7 @@ $( document ).ready( function() {
             if ( response.code < 0) {
                 msg = "Error: " + response.msg;
             } else {
-                msg = "Success"
+                msg = "Success";
             }
             $( "#cal-results" ).text( msg );
         });
@@ -83,10 +82,23 @@ $( document ).ready( function() {
             val: val
         }).done( function( response ) {
             var id = response.prop + "-" + response.setting + "-value";
-            $( "#" + id ).addClass( 'text-warning' ).text( response.value );
+            $( "#" + id ).addClass( "text-warning" ).text( response.value );
             $( "#cal-results" ).text( "Saved calibration setting." )
         }).fail( function() {
-            $( "#cal-results" ).text( "Failed to set calibrate settings." )
+            $( "#cal-results" ).text( "Failed to set calibrate settings." );
+        });
+    });
+
+    $( ".color-slider" ).change( function() {
+        var setting = $( this ).attr( "id" );
+        var val = $( this ).val();
+        $.post( "/set_color_slider", {
+            setting: setting,
+            val: val
+        }).done( function( response ) {
+            draw_colors(response.colors);
+        }).fail( function() {
+            console.log( "Failed to set calibrate settings." );
         });
     });
 });

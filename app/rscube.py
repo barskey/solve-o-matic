@@ -5,13 +5,10 @@ from app.lookups import *
 class MyCube(object):
 
 	def __init__(self):
-		self._colors = [] # list of colors to match against
-		self._raw_colors = [[None for i in range(9)] for j in range(6)] # [r,g,b,a] for each raw color found on cube
 		self._cube_colors = [[None for i in range(9)] for j in range(6)] # letter for corresponding face_color for each site on cube
 		self.solve_to = 'Solid Cube' # string representing cube solve to pattern
 		self._solve_string = None # instructions to solve cube
 
-		self._grip_state = {'A': None, 'B': None}
 		self.orientation = 'UFD' # current orientation of the cube, Upface, gripper A Face, gripper B Face
 
 	@property
@@ -55,16 +52,6 @@ class MyCube(object):
 		print (self._solve_string) # debug
 		return self._solve_string
 
-	def set_cube_colors(self):
-		"""
-		Sets each site to letter representing face color
-		"""
-		for f in range(6):
-			for s in range(9):
-				break
-				#self._cube_colors[f][s] = FACES_STR[self._face_colors.index(self._match_colors[f][s])]
-		#print self._cube_colors # debug
-
 	def get_cube_def(self):
 		"""
 		Returns cube_def in the form UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
@@ -83,12 +70,6 @@ class MyCube(object):
 		"""
 		return UP_FACE_ROT[self._orientation]
 
-	def set_raw_color(self, face, site, rawcolor):
-		"""
-		Sets the raw color for site on given face.
-		"""
-		self._raw_colors[FACES[face]][site] = rawcolor
-
 	def set_orientation(self, gripper, dir):
 		"""
 		Updates cube orientation given a gripper and direction it twisted
@@ -98,12 +79,11 @@ class MyCube(object):
 		elif gripper == 'B':
 			self.orientation = NEW_ORIENTATION_TWISTB[self.orientation][dir]
 
-	def move_face_for_twist(self, face_to_move, to_gripper = None):
+	def get_moves_for_twist(self, face_to_move, to_gripper = None):
 		"""
-		Will position face_to_move to gripper A or B depending on fewest moves.
-		Moves face to chosen gripper, and updates cube orientation.
+		Returns list of moves to position face_to_move to gripper A or B
+		depending on fewest moves.
 		If gripper passed as arg face_to_move will be positioned to input gripper.
-		Returns chosen gripper
 		"""
 		moves = None
 		o = self._orientation
@@ -132,16 +112,5 @@ class MyCube(object):
 			else:
 				moves = moves_b # moves to gripper B
 				to_gripper = 'B'
-		if len(moves) > 0:
-			print ('Moving face %i to gripper %s') % (face, to_gripper)
 
-		# perform the moves (if any)
-		for move in moves:
-			gripper_to_move = move[0]
-			cmd = move[1]
-			#if cmd == '+' or cmd == '-': # if it's a twist command
-			#	self.twist(gripper_to_move, cmd)
-			#else: # it must be a grip command
-			#	self.grip(gripper_to_move, cmd)
-
-		return to_gripper
+		return moves
