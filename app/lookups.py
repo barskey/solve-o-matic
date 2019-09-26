@@ -162,12 +162,11 @@ UP_FACE_ROT = {
 }
 
 # Lookup table to reorder list corresponding to given orientation
-# need to subtract 1 from this number to get index
 ROT_TABLE = {
-	0: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-	90: [7, 4, 1, 8, 5, 2, 9, 6, 3],
-	180: [9, 8, 7, 6, 5, 4, 3, 2, 1],
-	270: [3, 6, 9, 2, 5, 8, 1, 4, 7]
+	0: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+	90: [6, 3, 0, 7, 4, 1, 8, 5, 2],
+	180: [8, 7, 6, 5, 4, 3, 2, 1, 0],
+	270: [2, 5, 8, 1, 4, 7, 0, 3, 6]
 }
 
 PATTERNS = {

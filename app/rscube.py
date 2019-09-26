@@ -5,11 +5,7 @@ from app.lookups import *
 class MyCube(object):
 
 	def __init__(self):
-		self._cube_colors = [[None for i in range(9)] for j in range(6)] # letter for corresponding face_color for each site on cube
-		self.solve_to = 'Solid Cube' # string representing cube solve to pattern
-		self._solve_string = None # instructions to solve cube
-
-		self.orientation = 'UFD' # current orientation of the cube, Upface, gripper A Face, gripper B Face
+		self.reset_cube()
 
 	@property
 	def orientation(self):
@@ -26,12 +22,13 @@ class MyCube(object):
 	@solve_to.setter
 	def solve_to(self, pattern):
 		self._solve_to = PATTERNS[pattern][1]
-
-	def get_abs_site(self, site_r):
-		"""
-		Transposes site numbers given up_face rotation. Returns unrotated site number given rotated site.
-		"""
-		return ROT_TABLE[UP_FACE_ROT[self._orientation]][site_r - 1]
+	
+	def reset_cube(self):
+		self._cube_colors = [[None for i in range(9)] for j in range(6)] # letter for corresponding face_color for each site on cube
+		self._face_color = {} # dict for looking up face assigned to hex color on each face (center site). key:#ffffff val:0
+		self.solve_to = 'Solid Cube' # string representing cube solve to pattern
+		self._solve_string = None # instructions to solve cube
+		self.orientation = 'UFD' # current orientation of the cube, Upface, gripper A Face, gripper B Face
 
 	def get_solve_string(self):
 		"""
@@ -56,7 +53,11 @@ class MyCube(object):
 		"""
 		Returns cube_def in the form UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
 		"""
-		return ''.join(str(site) for sitelist in self._cube_colors for site in sitelist)
+		cube_def = ''
+		for face in self._cube_colors:
+			for site in face:
+				cube_def = cube_def + FACES_STR[self._face_color[site]]
+		return cube_def
 
 	def get_up_face(self):
 		"""
@@ -78,6 +79,20 @@ class MyCube(object):
 			self.orientation = NEW_ORIENTATION_TWISTA[self.orientation][dir]
 		elif gripper == 'B':
 			self.orientation = NEW_ORIENTATION_TWISTB[self.orientation][dir]
+	
+	def set_face_colors(self, colors):
+		"""
+		Takes list of colors with respect to camera (0 in UL, 8 in LR),
+		rotates as necessary and saves in self cube colors.
+		Returns face colors in un-rotated list.
+		"""
+		site_r = 0
+		upface = FACES[self._orientation[0]]
+		for i in ROT_TABLE[self.get_up_rot()]:
+			self._cube_colors[upface][i] = colors[site_r]
+			site_r += 1
+		self._face_color[colors[4]] = upface # set face color with center site
+		return self._cube_colors[upface]
 
 	def get_moves_for_twist(self, face_to_move, to_gripper = None):
 		"""

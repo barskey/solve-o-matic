@@ -16,7 +16,7 @@ THRESHOLD = 10
 # channels on servo pwm board
 GRIP_CHANNEL = {'A': 1, 'B': 3}
 TWIST_CHANNEL = {'A': 0, 'B': 2}
-SLEEP_TIME = 0.1 # time to sleep after sending servo cmd
+SLEEP_TIME = 0.5 # time to sleep after sending servo cmd
 
 kit = ServoKit(channels=8)
 
@@ -34,7 +34,6 @@ MOVES_FOR_SCAN = [
 
 class Bot(object):
     _cube = None
-    _colors = []
     camera = None
     
     _grip_state = {'A': 'o', 'B': 'o'}
@@ -161,17 +160,30 @@ class Bot(object):
         
         self._twist_state[gripper] = new_state
         return [0 if self._grip_state[other_gripper] == 'o' else 1, dir] # return 0 if this twist moves cube and changes orientation, else return 1
+    
+    def ready_load(self):
+        """ moves grippers to load positions """
+        # open first so they don't collide as they twist
+        self.grip('A', 'o')
+        self.grip('B', 'o')
+        # move both to center
+        self.twist('A', 'center')
+        self.twist('B', 'center')
+        # move both to load
+        self.grip('A', 'l')
+        self.grip('B', 'l')
+        return 0
 
     def start_scan(self):
         self._scan_index = 0
-        self._cube.orientation = 'UFD'
+        self._cube.reset_cube()
         self.grip('B','c')
         self.grip('A','c')
         return [0, 'Ready']
 
     def scan_move(self):
         if self._scan_index >= len(MOVES_FOR_SCAN):
-            return 'Done!'
+            return [1, 'Done!']
 
         for move in MOVES_FOR_SCAN[self._scan_index]:
             if len(move) > 0:
@@ -183,7 +195,7 @@ class Bot(object):
                         self._cube.set_orientation(gripper, cmd)
                 elif cmd in ['o', 'c', 'l']:
                     result = self.grip(gripper, cmd)
-        self._scan_index = self._scan_index + 1
+        self._scan_index += 1
         return [0, 'Move done']
     
     def save_snapshot(self):
@@ -203,30 +215,30 @@ class Bot(object):
 
     def process_face(self):
         """
-        Gets image from camera, crops and gets average (mean) colors in each region.
-        Returns list of colors on this face and face name for uix
+        Gets image from camera, crops and gets average (mean) colors in each site.
+        Saves colors on cube and returns color list and face name for uix.
         """
         face_img = Image.open(self.get_imagestream()) # open in-memory stream as PIL image
 
-        # loop through each site and store its raw color
-        sitenum = 0
-        face_colors = [None for i in range(9)]
+        # loop through each site and determine color
+        face_colors = []
         for row in range(3):
             for col in range(3):
-                print('r{}c{}'.format(row, col))
+                print('r{}c{}'.format(row, col)) # debug
                 left = self.sites['tlx'] + (col * self.sites['pitch'])
                 upper = self.sites['tly'] + (row * self.sites['pitch'])
                 box = (left, upper, left + self.sites['size'], upper + self.sites['size'])
                 site = face_img.crop(box) # crop the img so only the site is left
+
                 mean_color = ImageStat.Stat(site).mean
                 c = Color.from_rgb_bytes(mean_color[0], mean_color[1], mean_color[2])
-                #print(c.rgb)
                 site_color = self.get_color(c)
                 print('Color identified:{}'.format(str(site_color)))
-                face_colors[sitenum] = str(site_color) # return the hex color
-                sitenum = sitenum + 1
-        #print(self._colors)
-        return {'colors': face_colors, 'upface': self._cube.get_up_face()}
+                face_colors.append(str(site_color)) # save the hex color
+        # TODO check if range of colors is high on site 4-center, and guess that it is a logo
+
+        colors_r = self._cube.set_face_colors(face_colors)
+        return {'colors': colors_r, 'upface': self._cube.get_up_face()}
     
     def get_color(self, c):
         """ Decide the color by its h value (non-white) or by s and v (white) """

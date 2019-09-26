@@ -9,6 +9,11 @@ $( document ).ready( function() {
         "B": [135,100]
     }
 
+    $.post( "/ready_load" )
+    .done( function( reponse ) {  
+        $( "#scan-status" ).html( "Place cube with logo\nopposite the camera." );
+    });
+
     function get_sites() {
         $.post( "/get_sites" )
         .done( function( response ) {
@@ -67,8 +72,8 @@ $( document ).ready( function() {
             $( "#scan-status" ).text( "Gripping..." );
             $.post( "/scan_next", { start: "true" })
             .done( function ( response ) {
-                $( "#scan-next" ).removeAttr( "disabled" ).text( "Next..." );
-                $( "#scan-status" ).html( "Give me your cube and I'll do the rest..." );
+                $( "#scan-next" ).removeAttr( "disabled" ).text( "Go" );
+                $( "#scan-status" ).html( "Everything look good? Let's go..." );
             });
         } else {
             $( this ).attr( { "disabled": true } );
@@ -76,7 +81,6 @@ $( document ).ready( function() {
             $.post( "/scan_next", { start: "false" })
             .done( function( response ) {
                 drawFace( response.upface, response.colors );
-                //var colors = ["#FF0000","#FFFF00","#FF00FF","#00FF00","#0000FF","#FFFFFF","#FF0F00F","#FFF000","#FFFF00"]
                 drawCamView( response.colors );
                 console.log( response );
             });

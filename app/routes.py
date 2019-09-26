@@ -18,13 +18,11 @@ def index():
 def scan():
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
-	mybot.grip('A', 'o')
-	mybot.grip('B', 'o')
-	mybot.twist('A', 'center')
-	mybot.twist('B', 'center')
-	mybot.grip('A', 'l')
-	mybot.grip('B', 'l')
 	return render_template('scan.html', title='Scan', img=img)
+
+@app.route('/ready_load')
+def ready_load():
+	return mybot.ready_load()
 
 @app.route('/calibration')
 def settings():
@@ -74,7 +72,7 @@ def move_gripper():
 
 	result = None
 	if cmd in ['open', 'load', 'close']:
-		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'c' 'o' or 'l'
+		result = mybot.grip(gripper, cmd[0]) # cmd[0] is first character, hence 'o' 'l' or 'c'
 	elif cmd in ['ccw', 'center', 'cw']:
 		result = mybot.twist(gripper, cmd)
 	elif cmd in ['min', 'max']:
@@ -88,6 +86,7 @@ def scan_next():
 		result = mybot.start_scan()
 		return jsonify({'msg': result[1], 'result': result[0]})
 	else:
-		result = mybot.scan_move()
-		if result[0] == 0:
+		result = 0
+		while result != 1:
+			r = mybot.scan_move()
 			return jsonify(mybot.process_face())
