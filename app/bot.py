@@ -33,9 +33,6 @@ MOVES_FOR_SCAN = [
 ]
 
 class Bot(object):
-    _cube = None
-    camera = None
-    
     _grip_state = {'A': 'o', 'B': 'o'}
     _twist_state = {'A': tp['center'], 'B': tp['center']}
     _grip_pos = {
@@ -54,7 +51,7 @@ class Bot(object):
     }
 
     def __init__(self, cal_data):
-        self._cube = rscube.MyCube()
+        self.cube = rscube.MyCube()
         self.update_cal(cal_data) # get/update calibration data for in this instance
         self.init_servos() # initialize servos to their default ranges/positions
         self.camera = PiCamera()
@@ -176,7 +173,7 @@ class Bot(object):
 
     def start_scan(self):
         self._scan_index = 0
-        self._cube.reset_cube()
+        self.cube.reset_cube()
         self.grip('B','c')
         self.grip('A','c')
         return [0, 'Ready']
@@ -192,11 +189,11 @@ class Bot(object):
                 if cmd in ['+', '-']:
                     result = self.twist(gripper, cmd)
                     if result[0] == 0:
-                        self._cube.set_orientation(gripper, cmd)
+                        self.cube.set_orientation(gripper, cmd)
                 elif cmd in ['o', 'c', 'l']:
                     result = self.grip(gripper, cmd)
         self._scan_index += 1
-        return [0, 'Move done']
+        return [0, 'Move done.']
     
     def save_snapshot(self):
         #camera.start_preview(fullscreen=False, window=(255,98,160,160))
@@ -237,8 +234,8 @@ class Bot(object):
                 face_colors.append(str(site_color)) # save the hex color
         # TODO check if range of colors is high on site 4-center, and guess that it is a logo
 
-        colors_r = self._cube.set_face_colors(face_colors)
-        return {'colors': colors_r, 'upface': self._cube.get_up_face()}
+        colors_r = self.cube.set_face_colors(face_colors) # set cube face colors, and get back rotated list
+        return {'colors': colors_r, 'upface': self.cube.get_up_face()}
     
     def get_color(self, c):
         """ Decide the color by its h value (non-white) or by s and v (white) """
@@ -262,6 +259,20 @@ class Bot(object):
                 return Color('blue')
         else:
             return Color('red')
+    
+    def go_solve(self):
+        move_string = self.cube.get_solve_string()
+        if move_string != 0:
+            moves = move_string.split()
+            for move in moves:
+                # parse move into command
+                    # first char is face to twist as string
+                    # no second char means single cw twist
+                    # second char as 2 means double cw twist
+                    #second char as ' means single ccw twist
+                # tell self to move or twust
+                # update cube orientation as necessary
+                print(move) # debug
 
 
 def set_servo_angle(s, a):

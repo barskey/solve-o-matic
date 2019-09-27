@@ -78,13 +78,20 @@ $( document ).ready( function() {
         } else {
             $( this ).attr( { "disabled": true } );
             $( "#scan-status" ).text( "Moving to position..." );
-            $.post( "/scan_next", { start: "false" })
-            .done( function( response ) {
-                drawFace( response.upface, response.colors );
-                drawCamView( response.colors );
-                console.log( response );
-            });
+            scan_next();
         }
     });
+
+    function scan_next() {
+        $.post( "/scan_next", { start: "false" })
+        .done( function( response ) {
+            drawFace( response.upface, response.colors );
+            drawCamView( response.colors );
+            console.log( response );
+            if (response.result == 0) {
+                scan_next();
+            }
+        });
+    }
 
 });

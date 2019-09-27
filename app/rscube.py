@@ -15,14 +15,6 @@ class MyCube(object):
 	def orientation(self, val):
 		self._orientation = val
 
-	@property
-	def solve_to(self):
-		return self._solve_to
-
-	@solve_to.setter
-	def solve_to(self, pattern):
-		self._solve_to = PATTERNS[pattern][1]
-	
 	def reset_cube(self):
 		self._cube_colors = [[None for i in range(9)] for j in range(6)] # letter for corresponding face_color for each site on cube
 		self._face_color = {} # dict for looking up face assigned to hex color on each face (center site). key:#ffffff val:0
@@ -34,7 +26,7 @@ class MyCube(object):
 		"""
 		Gets the solve string
 		"""
-		return self._solve_string
+		return self._solve_string if self._solve_string is not None else 0
 
 	def set_solve_string(self):
 		"""
@@ -42,12 +34,21 @@ class MyCube(object):
 		"""
 		cube_def = self.get_cube_def()
 		print (cube_def) # debug
-		print (self._solve_to) # debug
+		print (self.solve_to) # debug
 		cube_def = 'FLRLURDBLUUBBRLFRDRLFBFDBURLFUDDFBDRDUBBLRLFDUDLFBUFRU' # debug because pics are not in the correct order - hence unsolvable
-		self._solve_string = solve(cube_def, self._solve_to)
-		#self._solve_string = "R' D2 R' U2 R F2 D B2 U' R F' U R2 D L2 D' B2 R2 B2 U' B2" # debug
-		print (self._solve_string) # debug
-		return self._solve_string
+		solve_pattern = PATTERNS[self.solve_to][1]
+		#self._solve_string = solve(cube_def, solve_pattern)
+		self._solve_string = "R' D2 R' U2 R F2 D B2 U' R F' U R2 D L2 D' B2 R2 B2 U' B2" # debug
+		#print (self._solve_string) # debug
+		return self.get_solve_string()
+	
+	def update_solve_to(self, solveto):
+		"""
+		Updates the solve_to pattern. Returns the number of moves to the new pattern, 0 if not possible.
+		"""
+		self.solve_to = solveto
+		moves = self.set_solve_string()
+		return len(moves.split())
 
 	def get_cube_def(self):
 		"""

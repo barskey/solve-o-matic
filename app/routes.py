@@ -1,9 +1,8 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from flask import jsonify
 from app import app
 from app import calibration, bot
-import json
-import time
+from app.lookups import PATTERNS
 import base64
 
 cal = calibration.Calibration()
@@ -20,16 +19,31 @@ def scan():
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
 	return render_template('scan.html', title='Scan', img=img)
 
+@app.route('/solve')
+def solve():
+	return render_template('solve.html', title="Solve", solve_images=PATTERNS)
+
+@app.route('/update_solve', methods=['POST'])
+def update_solve():
+	solve_to = request.form['solve_to']
+	moves = mybot.cube.update_solve_to(solve_to)
+	solve_img = PATTERNS[solve_to][0]
+	return {'solve_to': solve_to, 'moves': moves, 'solve_img': solve_img}
+
+@app.route('/go_solve')
+def go_solve():
+	mybot.go_solve()
+
 @app.route('/ready_load')
 def ready_load():
-	return mybot.ready_load()
+	return jsonify(mybot.ready_load())
 
 @app.route('/calibration')
 def settings():
 	#mybot.save_snapshot()
 	image = mybot.get_imagestream()
 	img = base64.b64encode(image.getvalue()).decode('utf-8')
-	return render_template('calibration.html', title='Calibration', cal=cal, img=img) # TODO should I get servo_range from mybot?
+	return render_template('calibration.html', title='Calibration', cal=cal, img=img)
 
 @app.route('/set_cal_data', methods=['POST'])
 def set_calibrate():
@@ -44,7 +58,7 @@ def set_calibrate():
 	if setting in ['min', 'max']:
 		mybot.init_servos()
 	
-	return jsonify({'prop': prop, 'setting': setting, 'value': new_value})
+	return {'prop': prop, 'setting': setting, 'value': new_value}
 
 @app.route('/set_color_slider', methods=['POST'])
 def set_color_slider():
@@ -55,15 +69,15 @@ def set_color_slider():
 	cal.set_property('color_limits', setting, float(value))
 	mybot.update_cal(cal)
 	
-	return jsonify(mybot.process_face())
+	return mybot.process_face()
 
 @app.route('/get_sites', methods=['POST'])
 def get_sites():
-	return jsonify({'sites': cal.sites})
+	return {'sites': cal.sites}
 
 @app.route('/get_face_colors', methods=['POST'])
 def get_face_colors():
-	return jsonify(mybot.process_face())
+	return mybot.process_face()
 
 @app.route('/move_gripper', methods=['POST'])
 def move_gripper():
@@ -78,15 +92,19 @@ def move_gripper():
 	elif cmd in ['min', 'max']:
 		result = mybot.twist(gripper, cmd)
 	
-	return jsonify({'code': result[0], 'msg': result[1]})
+	return {'code': result[0], 'msg': result[1]}
 
 @app.route('/scan_next', methods=['POST'])
 def scan_next():
 	if request.form['start'] == 'true':
 		result = mybot.start_scan()
-		return jsonify({'msg': result[1], 'result': result[0]})
+		return {'msg': result[1], 'result': result[0]}
 	else:
-		result = 0
-		while result != 1:
-			r = mybot.scan_move()
-			return jsonify(mybot.process_face())
+		r = mybot.scan_move()
+		if r == 1:
+			# TODO check cube here and report if not solveable
+			return redirect(url_for('solve'))
+		else:
+			result = mybot.process_face()
+			result['result'] = 0
+			return result
