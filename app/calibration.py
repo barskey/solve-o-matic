@@ -12,7 +12,6 @@ class Calibration(object):
         self.gripb = caldata['gripb']
         self.twista = caldata['twista']
         self.twistb = caldata['twistb']
-        self.colors = caldata['colors']
         self.color_limits = caldata['color_limits']
 
     def get_property(self, prop, param):
@@ -29,8 +28,6 @@ class Calibration(object):
             value = self.twista[param]
         elif prop == "twistb":
             value = self.twistb[param]
-        elif prop == "colors":
-            value = self.colors[param]
         elif prop == "color_limits":
             value = self.color_limits[param]
         return value
@@ -48,8 +45,6 @@ class Calibration(object):
             self.twista[param] = value
         elif prop == "twistb":
             self.twistb[param] = value
-        elif prop == "colors":
-            self.colors[param] = value
         elif prop == "color_limits":
             self.color_limits[param] = value
         self.write_to_file()
@@ -62,7 +57,6 @@ class Calibration(object):
             'gripb': self.gripb,
             'twista': self.twista,
             'twistb': self.twistb,
-            'colors': self.colors,
             'color_limits': self.color_limits
         }
         with open('app/calibrate.json', 'w') as outfile:
