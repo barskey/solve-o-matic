@@ -13,7 +13,7 @@ $( document ).ready( function() {
     var cc = $( "#colors-canvas" )[0].getContext( "2d" );
 
     function draw_sites() {
-        sc.clearRect(0, 0, canvas.width, canvas.height);
+        sc.clearRect(0, 0, sc.width, sc.height);
         sc.strokeStyle = "#FFFFFF"
         for ( var r = 0; r < 3; r++ ) {
             for ( var c = 0; c < 3; c++ ) {
