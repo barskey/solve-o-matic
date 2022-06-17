@@ -1,4 +1,4 @@
-numpy==1.12.1
+numpy==1.21.0
 picamera==1.13
 astroid==2.1.0
 cffi==1.12.0
